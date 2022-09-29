@@ -518,7 +518,7 @@ class Checklist(ttk.Frame):
         initializer
         """
         super().__init__(master, **kwargs)
-        self.rowconfigure(1, weight=1, minsize=45)
+        self.rowconfigure(1, weight=1, minsize=40)
 
         if filter:
             filter_frm = ttk.Frame(self)
