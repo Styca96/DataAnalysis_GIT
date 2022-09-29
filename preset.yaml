@@ -1,0 +1,133 @@
+lifetest:
+  THOR:
+  - Temp
+  - Tinlet_PM1
+  - T_PFC_PM1
+  - T_DCDC1_PM1
+  - T_DCDC2_PM1
+  - Tinlet_PM2
+  - T_PFC_PM2
+  - T_DCDC1_PM2
+  - T_DCDC2_PM2
+  - Tinlet_PM3
+  - T_PFC_PM3
+  - T_DCDC1_PM3
+  - T_DCDC2_PM3
+  - Tinlet_PM4
+  - T_PFC_PM4
+  - T_DCDC1_PM4
+  - T_DCDC2_PM4
+  - Tinlet_PM5
+  - T_PFC_PM5
+  - T_DCDC1_PM5
+  - T_DCDC2_PM5
+  - Tinlet_PM6
+  - T_PFC_PM6
+  - T_DCDC1_PM6
+  - T_DCDC2_PM&
+  JASMINE:
+  - Temp
+  - Tinlet_PM1
+  - T_PFC_PM1
+  - T_DCDC1_PM1
+  - T_DCDC2_PM1
+  - Tinlet_PM2
+  - T_PFC_PM2
+  - T_DCDC1_PM2
+  - T_DCDC2_PM2
+  - Tinlet_PM3
+  - T_PFC_PM3
+  - T_DCDC1_PM3
+  - T_DCDC2_PM3
+  - Tinlet_PM4
+  - T_PFC_PM4
+  - T_DCDC1_PM4
+  - T_DCDC2_PM4
+  MARATHOR:
+  - Temp
+  - Tinlet_PM1
+  - T_PFC_PM1
+  - T_DCDC1_PM1
+  - T_DCDC2_PM1
+  - Tinlet_PM2
+  - T_PFC_PM2
+  - T_DCDC1_PM2
+  - T_DCDC2_PM2
+  - Tinlet_PM3
+  - T_PFC_PM3
+  - T_DCDC1_PM3
+  - T_DCDC2_PM3
+  THOR_365:
+  - Temp
+  - Tinlet_PM1
+  - T_PFC_PM1
+  - T_DCDC1_PM1
+  - T_DCDC2_PM1
+
+thermal:
+  DEFAULT:
+  - L ph.R Coil bottom (A)
+  - L ph.S Coil bottom (A)
+  - L ph.T Coil bottom (A)
+  - L ph.T Coil bottom (B)
+  - L ph.S Coil bottom (B)]
+  - L ph.R Coil bottom (B)
+  - L ph.R Core(A)
+  - L ph.S Core(A)
+  - L ph.T Core(A)
+  - L ph.R Core(B)
+  - L ph.S Core(B)
+  - L ph.T Core(B)
+  - C12 (B)
+  - C19 (B)
+  - 013_L ph.R Coil surface (Fan outlet side) (B)
+  - Ambient C16-C12 (B)
+  - Ambient C16-L2 (B)]
+  - Connector L ph.R (Fan outlet side) (B)
+  - C16 (B)
+  - Connector L ph.T (Fan outlet side) (B)
+  - C14 (B)
+  - Heatsink ph.R (B)
+  - Welding connection L ph.R (B)
+  - C202(B)
+  - C13 (B)
+  - Ambient C13-C17 (B)
+  - Heatsink ph.T (B)
+  - Ambient C20-K6 (A)
+  - Ambient C25-C19 (A)]
+  - C20 (A)
+  - C8 (A)
+  - Filter L2 (A)
+  - Filter L3 (A)
+  - C19 (A)
+  - Aux Transformer - Logic Board
+  - DSP case - Logic Board
+  - C8 (B)
+  - C20 (B)
+  - Ambient C8-K6 (B)
+  - C19 (B)
+  - Ambient C16 (A)
+  - C20 (A)
+  - C13 (A)
+  - Ambient C13 (A)
+  - C7 (A)]
+  - C21 (A)
+  - Ambient C32-C25 (A)
+  - Ambient C16-C12 (A)
+  - Ambient C20-C26 (A)
+  - Tambient
+  - Air outlet SX (A)
+  - Air outlet Central (A)
+  - Air outlet DX (A)
+  - Current sensor ph.S (A)
+  - Ambient E-Cap centrale Vrel (B)
+  - K6 panasonic contact (B)
+  - K6 panasonic coil (B)
+  - K6 HongFa Contact PCB (A)
+  - Ambient C8-C9 (A)
+  - K2 panasonic contact (B)
+  - K2 panasonic coil (B)
+  - K2 Zettler contact PCB (A)
+  - C16 (A)
+  - Welding connection L ph.R (Fan Inlet Side) (B)
+  - Welding connection L ph.S (Fan Outlet Side) (B)
