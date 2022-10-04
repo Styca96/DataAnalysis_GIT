@@ -1,6 +1,5 @@
 #!/usr/bin/env python
-"""Raw Data Analysis fr
-"""
+"""Data Analysis"""
 import datetime as dt
 import tkinter as tk
 from functools import singledispatchmethod
@@ -49,8 +48,6 @@ class DataAnalysis(ttk.Window):
         )
         self.iconphoto(True, tksvg.SvgImage(file=f"{APP_PATH}/rsc/trello.svg",
                                             height=24, width=24))
-        self.title()
-        self.geometry()
         self.state("zoomed")
         self.bind_all("<Button-1>", lambda event: event.widget.focus_set())
         self._style_mod()
@@ -76,7 +73,7 @@ class DataAnalysis(ttk.Window):
 
     def _style_mod(self):
         """Create custom Style"""
-        
+
         f = font.nametofont("TkDefaultFont")
         f.configure(family="ABBvoice", size=10)
 
@@ -225,6 +222,7 @@ class View(ttk.Frame):
             twin_y_sel = self.twin_y.get()
             self.twin_y.selected.set("")
             valid_selection = [i for i in twin_y_sel if i in options]
+            self.twin_y.clear_list()
             self.twin_y.insert(options, valid_selection)
         self.frm_option._listbox.listbox.bind("<<ListboxSelect>>",
                                               lambda *_: update_twin_y(),
@@ -2290,6 +2288,12 @@ class Controller(Ctrl_Thermal, Ctrl_LifeTest):
                 with open(f"{APP_PATH}\\preset.yaml", "r") as f:
                     preset = yaml.safe_load(f)
                 def_col = preset["thermal"]["DEFAULT"]
+                def_col = [i.strip()
+                           .replace(" ", "_")
+                           .replace("(", "")
+                           .replace(")", "")
+                           .replace(",", "")
+                           for i in def_col]
 
                 # ----- RESET LIFETEST ----- #
                 self.__clear_view_lt()

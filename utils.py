@@ -619,12 +619,14 @@ class Checklist(ttk.Frame):
         """Remove Selected Listbox selection"""
         idx = self._slct_lstbx.listbox.curselection()
         if idx == ():
-            self.all_btn.config(text="Select All")
+            return
         val = self._slct_lstbx.listbox.get(*idx)
         self._slct_lstbx.listbox.delete(*idx)
         self._listbox.listbox.selection_clear(
             self._listbox.listbox.get(0, tk.END).index(val)
             )
+        if self.get() == ():
+            self.all_btn.config(text="Select All")    
 
     def insert(self, available: list = [], selected: list = []):
         """Insert available items in the first Listbox and automatically
