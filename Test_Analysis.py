@@ -269,7 +269,7 @@ class View(ttk.Frame):
         opt2.btn.configure(image=option_frm.images[1])
 
         # ----- SEPARATOR ----- # # TODO change with PanedWindow
-        sep = ttk.Separator(visual_tab, orient="vertical") 
+        sep = ttk.Separator(visual_tab, orient="vertical")
         sep.pack(side=tk.LEFT, fill="y")
 
         # ----- GRAPH FRAME ----- #
@@ -296,14 +296,14 @@ class View(ttk.Frame):
 
         graph_frm.rowconfigure(0, weight=1)
         graph_frm.columnconfigure(5, weight=1)
-        
+
         # ################################ #
         # ----- ALL RESULT TAB FRAME ----- #
         # ################################ #
         result_tab = ttk.Frame(thermal)
         thermal.add(result_tab, text="Thermal Result", sticky="nsew",) #  state="disabled"
         result_tab.columnconfigure(1, weight=1)
-        
+
         ttk.Label(result_tab, text="Selected Column Result"
                   ).grid(row=0, column=0)
         self.detail_res = Sheet(
@@ -318,7 +318,7 @@ class View(ttk.Frame):
         self.detail_res.row_index(["MEAN", "MAX", "MIN"])
         self.detail_res.enable_bindings()
         self.detail_res.grid(row=1, column=0, columnspan=4, sticky="nswe")
-        
+
         ttk.Label(result_tab, text="All Column Result"
                   ).grid(row=2, column=0)
         self.all_res = Sheet(
@@ -540,7 +540,7 @@ class DataDistribution(ttk.Frame):
 
 class LT_TimeSerie(ttk.Frame):
     """### LifeTest TIMESERIES Frame"""
-    
+
     def __init__(self,
                  master: tk.Misc = ...,
                  big_fig: bool = False,
@@ -646,7 +646,7 @@ class LT_TimeSerie(ttk.Frame):
 
     def update_value(self, var, idx, mode):
         """Update value based on Meter var value"""
-        
+
         if self.xlim_min is None or self.xlim_max is None:
             return
 
@@ -1133,7 +1133,7 @@ class Model:
         - Drop not useful column and all NaN column
         - Try to infer to float all object columns
         - interpolate columns with NaN, max 3, with backward value
-        - Report NaN and Obj_Col\n     
+        - Report NaN and Obj_Col\n
         Args:
             data (pd.DataFrame): data
             revision (bool, optional): Inform if data is raw. Defaults to False.
@@ -1154,7 +1154,7 @@ class Model:
             # temp_data.Date = pd.to_datetime(
             #     temp_data['Date'].astype(str) + " " + temp_data['Time'].astype(str)  # noqa: E501
             #     )
-            temp_data.Date = pd.to_datetime(temp_data['Date'].astype(str))
+            temp_data.Date = pd.to_datetime(temp_data['Date'].astype(str), dayfirst=True)
         else:  # new monitor file
             temp_data.DateTime = pd.to_datetime(temp_data['DateTime'])
             temp_data.rename(columns={"DateTime": "Date"}, inplace=True)
@@ -1788,7 +1788,7 @@ class Ctrl_Thermal:
             verify=False,
             reset_highlights=False,
             )
-        
+
         self.view.detail_res.total_columns(number=len(row_index_p))
         self.view.detail_res.headers(newheaders=row_index_p)
         self.view.detail_res.set_sheet_data(
@@ -1799,7 +1799,7 @@ class Ctrl_Thermal:
             verify=False,
             reset_highlights=False,
             )
-        
+
         self.view.all_res.total_columns(number=len(row_index))
         self.view.all_res.headers(newheaders=row_index)
         self.view.all_res.set_sheet_data(
@@ -2402,7 +2402,7 @@ class Controller(Ctrl_Thermal, Ctrl_LifeTest):
         self.view.th_plot_frm.clear()
 
         self.view.debug_res.set_sheet_data(data=[[]])
-        
+
         # TODO clear result
         self.view.thermal.tab(1, state="disabled")
         self.view.detail_res.set_sheet_data(data=[[]])

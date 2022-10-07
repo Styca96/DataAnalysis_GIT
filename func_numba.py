@@ -24,7 +24,7 @@ def speg_acc_index(data: npt.NDArray[np.float64], soglia: int) ->\
         if ((data[i+1] < soglia or np.isnan(data[i+1])) and data[i] > soglia):
             spegnimenti.append(i+1)
             # np.append(spegnimenti,i+1)
-        if (data[i+1] > soglia and (data[i] < soglia or np.isnan(data[i+1]))):
+        if (data[i+1] > soglia and (data[i] < soglia or np.isnan(data[i]))):
             accensioni.append(i+1)
             # np.append(accensioni,i+1)
     spegnimenti = np.array(spegnimenti)
