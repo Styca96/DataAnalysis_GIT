@@ -168,12 +168,13 @@ class View(ttk.Frame):
                     image="lifetest_tab")
 
     def __createthermal(self, thermal: ttk.Notebook):
+        # ################################## #
+        # ## ----- VISUAL TAB FRAME ----- ## #
+        # ################################## #
         visual_tab = ttk.Frame(thermal)
         thermal.add(visual_tab, text="Thermal DataView", sticky="nsew")
 
-        # ################################ #
         # ----- VISUAL OPT FRM FRAME ----- #
-        # ################################ #
         visual_opt_frm_scroll = ScrollFrame(visual_tab, mousebind=False)
         visual_opt_frm = visual_opt_frm_scroll.viewPort
         visual_opt_frm_scroll.pack(side=tk.LEFT, fill="y")
@@ -267,15 +268,11 @@ class View(ttk.Frame):
         opt2.grid_remove()
         opt2.btn.configure(image=option_frm.images[1])
 
-        # ################################# #
-        # ##### ----- SEPARATOR ----- ##### # # TODO change with PanedWindow
-        # ################################# #
+        # ----- SEPARATOR ----- # # TODO change with PanedWindow
         sep = ttk.Separator(visual_tab, orient="vertical") 
         sep.pack(side=tk.LEFT, fill="y")
 
-        # ################################# #
-        # #### ----- GRAPH FRAME ----- #### #
-        # ################################# #
+        # ----- GRAPH FRAME ----- #
         graph_frm = ttk.Frame(visual_tab)
         graph_frm.pack(side=tk.LEFT, fill="both", expand=1)
 
@@ -284,7 +281,7 @@ class View(ttk.Frame):
         self.th_plot_frm.grid(row=0, column=2, columnspan=4, sticky="nsew")
 
         # ----- RESULT FRAME ----- #
-        self.result = Sheet(
+        self.debug_res = Sheet(
             graph_frm,
             width=600,
             height=80,
@@ -293,12 +290,49 @@ class View(ttk.Frame):
             show_x_scrollbar=True,
             show_y_scrollbar=False,
         )
-        self.result.row_index(["MEAN"])
-        self.result.enable_bindings()
-        self.result.grid(row=1, column=2, columnspan=4, sticky="nswe")
+        self.debug_res.row_index(["MEAN"])
+        self.debug_res.enable_bindings()
+        self.debug_res.grid(row=1, column=2, columnspan=4, sticky="nswe")
 
         graph_frm.rowconfigure(0, weight=1)
         graph_frm.columnconfigure(5, weight=1)
+        
+        # ################################ #
+        # ----- ALL RESULT TAB FRAME ----- #
+        # ################################ #
+        result_tab = ttk.Frame(thermal)
+        thermal.add(result_tab, text="Thermal Result", sticky="nsew",) #  state="disabled"
+        result_tab.columnconfigure(1, weight=1)
+        
+        ttk.Label(result_tab, text="Selected Column Result"
+                  ).grid(row=0, column=0)
+        self.detail_res = Sheet(
+            result_tab,
+            # width=600,
+            height=160,
+            data=[["MEAN"], ["MAX"], ["MIN"]],
+            total_rows=3,
+            show_x_scrollbar=True,
+            show_y_scrollbar=False,
+        )
+        self.detail_res.row_index(["MEAN", "MAX", "MIN"])
+        self.detail_res.enable_bindings()
+        self.detail_res.grid(row=1, column=0, columnspan=4, sticky="nswe")
+        
+        ttk.Label(result_tab, text="All Column Result"
+                  ).grid(row=2, column=0)
+        self.all_res = Sheet(
+            result_tab,
+            # width=600,
+            height=160,
+            data=[["MEAN"], ["MAX"], ["MIN"]],
+            total_rows=3,
+            show_x_scrollbar=True,
+            show_y_scrollbar=False,
+        )
+        self.all_res.row_index(["MEAN", "MAX", "MIN"])
+        self.all_res.enable_bindings()
+        self.all_res.grid(row=3, column=0, columnspan=4, sticky="nswe")
 
     def __createlifetest(self, lifetest: ttk.Notebook):
         # ## ----- OPTION TAB ----- ## #
@@ -828,7 +862,7 @@ class TH_TimeSerie(ttk.Frame):
         self.span = None
         self.x_data = None
         self.x_index = None
-        self.fixed_span = True
+        self.fixed_span = False
         self.ax_string = {
             "title": tk.StringVar(),
             "x_label": tk.StringVar(),
@@ -1619,7 +1653,7 @@ class Model:
             max_p = np.nan
             min_p = np.nan
 
-        self.span_data[data] = [mean_p, max_p - min_p]
+        self.span_data[data] = [mean_p, max_p, min_p]
 
 
 class Ctrl_Thermal:
@@ -1723,6 +1757,7 @@ class Ctrl_Thermal:
         self.__analisi_data(col_list, col_slc1 | col_slc2)
         if self.view.show_mean_th.get():
             self.__analisi_plot(col_slc1, col_slc2)
+        self.view.thermal.tab(1, state="normal")
 
     def __analisi_data(self, col_list: list, col_selected: list):
         """Handle data elaboration and show result\n
@@ -1743,18 +1778,9 @@ class Ctrl_Thermal:
         ]
         row_index_p = [key for key in result.keys() if key in col_selected]
 
-        # self.view.result.set_sheet_data(
-        #     data=[[i[0] for i in data]],
-        #     reset_col_positions=True,
-        #     reset_row_positions=True,
-        #     redraw=True,
-        #     verify=False,
-        #     reset_highlights=False,
-        #     )
-        # TODO updatev result tab whit result
-        self.view.result.total_columns(number=len(col_selected))
-        self.view.result.headers(newheaders=col_selected)
-        self.view.result.set_sheet_data(
+        self.view.debug_res.total_columns(number=len(row_index_p))
+        self.view.debug_res.headers(newheaders=row_index_p)
+        self.view.debug_res.set_sheet_data(
             data=[[i[0] for i in data_p]],
             reset_col_positions=True,
             reset_row_positions=True,
@@ -1762,8 +1788,30 @@ class Ctrl_Thermal:
             verify=False,
             reset_highlights=False,
             )
+        
+        self.view.detail_res.total_columns(number=len(row_index_p))
+        self.view.detail_res.headers(newheaders=row_index_p)
+        self.view.detail_res.set_sheet_data(
+            data=list(zip(*data_p)),
+            reset_col_positions=True,
+            reset_row_positions=True,
+            redraw=True,
+            verify=False,
+            reset_highlights=False,
+            )
+        
+        self.view.all_res.total_columns(number=len(row_index))
+        self.view.all_res.headers(newheaders=row_index)
+        self.view.all_res.set_sheet_data(
+            data=list(zip(*data)),
+            reset_col_positions=True,
+            reset_row_positions=True,
+            redraw=True,
+            verify=False,
+            reset_highlights=False,
+            )
 
-    def __analisi_plot(self, col_slc1:list, col_slc2:list):
+    def __analisi_plot(self, col_slc1: list, col_slc2: list):
         """Plot selected column\n
         Args:
             col_slc1 (list): column for first y axes
@@ -2302,9 +2350,9 @@ class Controller(Ctrl_Thermal, Ctrl_LifeTest):
                 # ----- RESET THERMAL ----- #
                 self.__clear_view_th()
                 self.view.frm_option.insert(available=columns, selected=def_col)
-                self.view.result.total_columns(number=len(columns))
-                self.view.result.headers(newheaders=columns)
-                self.view.result.refresh(redraw_header=True,
+                self.view.debug_res.total_columns(number=len(columns))
+                self.view.debug_res.headers(newheaders=columns)
+                self.view.debug_res.refresh(redraw_header=True,
                                          redraw_row_index=True)
 
                 # ----- RESET MODEL ----- #
@@ -2353,8 +2401,12 @@ class Controller(Ctrl_Thermal, Ctrl_LifeTest):
         self.view.th_analysis_btn["state"] = "disabled"
         self.view.th_plot_frm.clear()
 
-        self.view.result.set_sheet_data(data=[[]])
+        self.view.debug_res.set_sheet_data(data=[[]])
+        
         # TODO clear result
+        self.view.thermal.tab(1, state="disabled")
+        self.view.detail_res.set_sheet_data(data=[[]])
+        self.view.all_res.set_sheet_data(data=[[]])
         # self.view.result_selected.reset_data()
         # self.view.result_all.reset_data()
 
