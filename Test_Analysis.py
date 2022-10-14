@@ -344,35 +344,37 @@ class View(ttk.Frame):
         # ################################ #
         result_tab = ttk.Frame(thermal)
         thermal.add(result_tab, text="Thermal Result", sticky="nsew", state="disabled")
-        result_tab.columnconfigure(1, weight=1)
+        result_tab.rowconfigure(1, weight=1)
 
         ttk.Label(result_tab, text="Selected Column Result"
                   ).grid(row=0, column=0)
         self.detail_res = Sheet(
             result_tab,
-            height=160,
-            data=[["MEAN"], ["MAX"], ["MIN"]],
-            total_rows=3,
+            width=600,
+            headers=["MEAN", "MAX", "MIN"],
+            data=[],
+            total_columns=3,
             show_x_scrollbar=True,
             show_y_scrollbar=False,
         )
-        self.detail_res.row_index(["MEAN", "MAX", "MIN"])
+        # self.detail_res.row_index(["MEAN", "MAX", "MIN"])
         self.detail_res.enable_bindings()
-        self.detail_res.grid(row=1, column=0, columnspan=4, sticky="nswe")
+        self.detail_res.grid(row=1, column=0, sticky="nswe")
 
         ttk.Label(result_tab, text="All Column Result"
-                  ).grid(row=2, column=0)
+                  ).grid(row=0, column=1)
         self.all_res = Sheet(
             result_tab,
-            height=160,
-            data=[["MEAN"], ["MAX"], ["MIN"]],
-            total_rows=3,
+            width=600,
+            headers=["MEAN", "MAX", "MIN"],
+            data=[],
+            total_columns=3,
             show_x_scrollbar=True,
             show_y_scrollbar=False,
         )
-        self.all_res.row_index(["MEAN", "MAX", "MIN"])
+        # self.all_res.row_index(["MEAN", "MAX", "MIN"])
         self.all_res.enable_bindings()
-        self.all_res.grid(row=3, column=0, columnspan=4, sticky="nswe")
+        self.all_res.grid(row=1, column=1, sticky="nswe")
 
     def __createlifetest(self, lifetest: ttk.Notebook):
         # ## ----- OPTION TAB ----- ## #
@@ -1898,27 +1900,41 @@ class Ctrl_Thermal:
             reset_highlights=False,
             )
 
-        self.view.detail_res.total_columns(number=len(row_index_p))
-        self.view.detail_res.headers(newheaders=row_index_p)
+        # self.view.detail_res.total_rows(number=len(row_index_p))
+        # self.view.detail_res.headers(newheaders=row_index_p)
         self.view.detail_res.set_sheet_data(
-            data=list(zip(*data_p)),
+            # data=list(zip(*data_p)),
+            data=data_p,
             reset_col_positions=True,
             reset_row_positions=True,
             redraw=True,
             verify=False,
             reset_highlights=False,
             )
+        self.view.detail_res.row_index(
+            newindex=row_index_p,
+            index=None,
+            reset_row_positions=False,
+            show_index_if_not_sheet=True,
+        )
 
-        self.view.all_res.total_columns(number=len(row_index))
-        self.view.all_res.headers(newheaders=row_index)
+        # self.view.all_res.total_rows(number=len(row_index))
+        # self.view.all_res.headers(newheaders=row_index)
         self.view.all_res.set_sheet_data(
-            data=list(zip(*data)),
+            # data=list(zip(*data)),
+            data=data,
             reset_col_positions=True,
             reset_row_positions=True,
             redraw=True,
             verify=False,
             reset_highlights=False,
             )
+        self.view.all_res.row_index(
+            newindex=row_index,
+            index=None,
+            reset_row_positions=False,
+            show_index_if_not_sheet=True,
+        )
 
     def __analisi_plot(self, col_slc1: list, col_slc2: list):
         """Plot selected column\n
