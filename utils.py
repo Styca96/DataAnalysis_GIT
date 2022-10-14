@@ -922,6 +922,75 @@ class CollapsingFrame(ttk.Frame):
             child.btn.configure(image=self.images[0])
 
 
+class PlaceholderEntry(ttk.Entry):
+    @property
+    def input(self):
+        return self.get() if self.get() not in [self.__ph, ''] else None
+
+    @input.setter
+    def input(self, value):
+        self.delete(0, 'end')
+        self.insert(0, value)
+        # self.configure(fg=self.ghost if value == self.__ph else self.normal)
+        self.configure(style=self.ghost if value == self.__ph else self.normal)
+
+    @property
+    def isempty(self) -> bool:
+        return self.get() == ''
+
+    @property
+    def isholder(self) -> bool:
+        return self.get() == self.__ph
+
+    def __init__(self, master: tk.Misc, placeholder: str, **kwargs):
+        ttk.Entry.__init__(self, master, **kwargs)
+
+        self.normal = "TEntry"
+        master.style.configure('PlaceHolder.TEntry', foreground='#BBBBBB')
+        self.ghost  = "PlaceHolder.TEntry"
+
+        self.__ph = placeholder
+        self.input = placeholder
+
+        vcmd = self.register(self.validate)
+        self.configure(validate='all', validatecommand=(vcmd, '%S', '%s', '%d'))
+
+        self.bind('<FocusIn>', self.focusin)
+        self.bind('<FocusOut>', self.focusout)
+        self.bind('<Key>', self.check)
+
+    #rewire .insert() to be a proxy of .input
+    def validate(self, action_text, orig_text, action):
+        if action == '1':
+            if orig_text == self.__ph:
+                self.input = action_text
+
+        return True
+
+    #removes placeholder if necessary
+    def focusin(self, event=None):
+        if self.isholder:
+            self.input = ''
+
+    #adds placeholder if necessary
+    def focusout(self, event=None):
+        if self.isempty:
+            self.input = self.__ph
+
+    #juggles the placeholder while you type
+    def check(self, event):
+        if event.keysym == 'BackSpace':
+            if self.input and len(self.input) == 1:
+                self.input = self.__ph
+                self.icursor(0)
+                return 'break'
+        elif self.isholder:
+            if event.char:
+                self.input = ''
+            else:
+                return 'break'
+
+
 # class Result(tk.Frame):
 #     def __init__(self, parent):
 #         super().__init__(parent)

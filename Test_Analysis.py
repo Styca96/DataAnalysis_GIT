@@ -26,9 +26,10 @@ from ttkbootstrap.dialogs import Messagebox
 
 import func_numba as fnb
 from utils import (APP_PATH, Checklist, CollapsingFrame, Menubar, MyTree,
-                   ScrollFrame, Slider, Statusbar, all_children,
-                   read_functions, retag)
+                   PlaceholderEntry, ScrollFrame, Slider, Statusbar,
+                   all_children, read_functions, retag)
 
+# plt.style.use('seaborn')
 rcParams["date.epoch"] = "2022-01-01T00:00:00"
 rcParams["date.autoformatter.hour"] = "%d %H:%M:%S"
 rcParams["date.autoformatter.minute"] = "%H:%M:%S"
@@ -268,6 +269,47 @@ class View(ttk.Frame):
         opt2.grid_remove()
         opt2.btn.configure(image=option_frm.images[1])
 
+        opt3 = ttk.Frame(option_frm, padding=5)
+        ttk.Label(opt3, text="Title: ", anchor="w"
+                  ).grid(row=0, column=0, padx=5, pady=(5, 0))
+        ttk.Label(opt3, text="X-axis Label: ", anchor="w"
+                  ).grid(row=1, column=0, padx=5, pady=(5, 0))
+        ttk.Label(opt3, text="Y1-axis Label: ", anchor="w"
+                  ).grid(row=2, column=0, padx=5, pady=(5, 0))
+        ttk.Label(opt3, text="Y2-axis Label: ", anchor="w"
+                  ).grid(row=3, column=0, padx=5, pady=(5, 0))
+        self.th_title_ent = ttk.Entry(opt3)  # PlaceholderEntry(opt3, )
+        self.th_title_ent.grid(row=0, column=1)
+        self.th_x_ent = ttk.Entry(opt3)  # PlaceholderEntry(opt3, )
+        self.th_x_ent.grid(row=1, column=1)
+        self.th_y_ent = ttk.Entry(opt3)  # PlaceholderEntry(opt3, )
+        self.th_y_ent.grid(row=2, column=1)
+        self.th_twiny_ent = ttk.Entry(opt3)  # PlaceholderEntry(opt3, )
+        self.th_twiny_ent.grid(row=3, column=1)
+        th_update_graph_btn = ttk.Button(opt3, text="Update graph",
+                                         bootstyle="outline-info",
+                                         command=self._th_graph_update)
+        th_update_graph_btn.grid(row=4, column=0, padx=5, pady=(5, 0))
+        ttk.Label(opt3, text="Horizontal line: ", anchor="w"
+                  ).grid(row=5, column=0, padx=5, pady=(5, 0))
+        self.th_x_line = tk.DoubleVar()
+        ttk.Entry(opt3, textvariable=self.th_x_line, width=8
+                  ).grid(row=5, column=1)
+        self.th_n_axis = tk.IntVar(value=1)
+        ttk.Radiobutton(opt3, text='Y1', value=1, variable=self.th_n_axis
+                        ).grid(row=5, column=2)
+        ttk.Radiobutton(opt3, text='Y2', value=2, variable=self.th_n_axis
+                        ).grid(row=5, column=3)
+        th_add_x_line_btn = ttk.Button(opt3, text="ADD",
+                                       bootstyle="outline-info",
+                                       command=self._th_graph_xline)
+        th_add_x_line_btn.grid(row=5, column=4, padx=5, pady=(5, 0))
+        # TODO add_line to graph
+        # self.th_y_line = tk.DoubleVar()
+
+        option_frm.add(child=opt3, title='Edit Graph', bootstyle="success")
+        opt3.grid_remove()
+        opt3.btn.configure(image=option_frm.images[1])
         # ----- SEPARATOR ----- # # TODO change with PanedWindow
         sep = ttk.Separator(visual_tab, orient="vertical")
         sep.pack(side=tk.LEFT, fill="y")
@@ -301,14 +343,13 @@ class View(ttk.Frame):
         # ----- ALL RESULT TAB FRAME ----- #
         # ################################ #
         result_tab = ttk.Frame(thermal)
-        thermal.add(result_tab, text="Thermal Result", sticky="nsew",) #  state="disabled"
+        thermal.add(result_tab, text="Thermal Result", sticky="nsew", state="disabled")
         result_tab.columnconfigure(1, weight=1)
 
         ttk.Label(result_tab, text="Selected Column Result"
                   ).grid(row=0, column=0)
         self.detail_res = Sheet(
             result_tab,
-            # width=600,
             height=160,
             data=[["MEAN"], ["MAX"], ["MIN"]],
             total_rows=3,
@@ -323,7 +364,6 @@ class View(ttk.Frame):
                   ).grid(row=2, column=0)
         self.all_res = Sheet(
             result_tab,
-            # width=600,
             height=160,
             data=[["MEAN"], ["MAX"], ["MIN"]],
             total_rows=3,
@@ -402,6 +442,16 @@ class View(ttk.Frame):
         if self.controller:
             self.controller.analysis_th()
 
+    def _th_graph_update(self):
+        if self.controller:
+            self.controller.update_th_fig(True)
+            
+    def _th_graph_xline(self):
+        if self.controller:
+            self.controller.th_add_line(
+                "x", self.th_x_line.get(), self.th_n_axis.get()
+                )
+
     # ##----messagebox function
     def show_error(self, error: str):
         """Mostra box di errore\n
@@ -420,6 +470,67 @@ class View(ttk.Frame):
         box_title = "Attenzion"
         box_message = warning
         Messagebox.show_warning(title=box_title, message=box_message)
+
+
+class Graph_Option:
+    _def_x_axis = "Time"
+    _def_y_axis = ["y1", "y2"]
+    _def_title = ""
+
+    def __init__(self, fig, *axisargs) -> None:
+        from matplotlib.axes._axes import Axes
+        from matplotlib.figure import Figure
+        self._fig: Figure = fig
+        self._axis: tuple[Axes] = axisargs
+
+    @property
+    def title(self):
+        return self._fig._suptitle._text
+
+    @title.setter
+    def title(self, new_title: str):
+        if isinstance(new_title, str):
+            if new_title == "":
+                new_title = self._def_title
+            self._fig.suptitle(new_title)
+        else:
+            raise TypeError("title must be a string")
+
+    @property
+    def x_axis(self):
+        return self._axis[0].get_xlabel()
+
+    @x_axis.setter
+    def x_axis(self, new_x_axis: str):
+
+        if isinstance(new_x_axis, str):
+            if new_x_axis == "":
+                new_x_axis = self._def_x_axis
+            self._axis[0].set_xlabel(new_x_axis)
+        else:
+            raise TypeError("x_axis must be a string")
+
+    @property
+    def y_axis(self) -> list[str]:
+        ax_y_label = [ax.get_ylabel() for ax in self._axis]
+        return ax_y_label
+
+    @y_axis.setter
+    def y_axis(self, new_y_axis: str | list[str]):
+        if isinstance(new_y_axis, str):
+            if new_y_axis == "":
+                new_y_axis = self._def_y_axis[0]
+            self._axis[0].set_ylabel(new_y_axis)
+        elif isinstance(new_y_axis, list):
+            if new_y_axis == ["", ""]:
+                new_y_axis = self._def_y_axis
+            try:
+                for ax, new_label in zip(self._axis, new_y_axis):
+                    ax.set_ylabel(new_label)
+            except IndexError:
+                raise IndexError("Axis not in list. Select another index")
+        else:
+            raise TypeError("y_axis must be a string or list of string")
 
 
 class DataDistribution(ttk.Frame):
@@ -443,6 +554,8 @@ class DataDistribution(ttk.Frame):
         self.controller = None
         # self.big_fig = big_fig
         self.__createwidget(big_fig)
+        self.graph_option = Graph_Option(self.fig, self.ax)
+        self.graph_option._def_x_axis = "Temp [°C]"
 
     def __createwidget(self, big_fig: bool):
         """Crea i widget\n
@@ -559,6 +672,7 @@ class LT_TimeSerie(ttk.Frame):
         self.controller = None
         # self.big_fig = big_fig
         self.__createwidget(big_fig)
+        self.graph_option = Graph_Option(self.fig, self.ax)
 
     def __createwidget(self, big_fig: bool):
         """Crea i widget\n
@@ -863,12 +977,7 @@ class TH_TimeSerie(ttk.Frame):
         self.x_data = None
         self.x_index = None
         self.fixed_span = False
-        self.ax_string = {
-            "title": tk.StringVar(),
-            "x_label": tk.StringVar(),
-            "y1_label": tk.StringVar(),
-            "y2_label": tk.StringVar(),
-        }
+        self.graph_option = Graph_Option(self.fig, self.ax1, self.ax2)
 
     def __createwidget(self):
         """Crea il Canvas con il plot\n"""
@@ -880,7 +989,7 @@ class TH_TimeSerie(ttk.Frame):
         self.canvas.get_tk_widget().pack(fill="both", side=tk.TOP, expand=1)
         self.canvas.draw_idle()
         self.canvas.mpl_connect("pick_event", self.__on_pick)
-        plt.subplots_adjust(left=0.06, bottom=0.06, top=0.95, right=0.95)
+        plt.subplots_adjust(left=0.06, bottom=0.07, top=0.95, right=0.94)
 
     def __on_pick(self, event: tk.Event):
         """ "Data la linea cliccata se visibile la nasconde e viceversa
@@ -989,6 +1098,7 @@ class TH_TimeSerie(ttk.Frame):
         # self.fig.delaxes(self.ax2)
         self.ax1 = self.fig.add_subplot(111)
         self.ax2 = self.ax1.twinx()
+        plt.subplots_adjust(left=0.06, bottom=0.07, top=0.95, right=0.94)
         self.canvas.draw_idle()
 
         self.line = []
@@ -997,15 +1107,12 @@ class TH_TimeSerie(ttk.Frame):
         self.span = None
         self.x_data = None
         self.x_index = None
-        self.ax_string = {
-            "title": tk.StringVar(),
-            "x_label": tk.StringVar(),
-            "y1_label": tk.StringVar(),
-            "y2_label": tk.StringVar(),
-        }
+        self.graph_option = Graph_Option(self.fig, self.ax1, self.ax2)
 
-    # TODO other function
-    # modify title and legend
+    def update(self):
+        self.canvas.draw_idle()
+        # fig.canvas.draw()
+        # fig.canvas.flush_events()
 
 
 class Model:
@@ -1684,9 +1791,11 @@ class Ctrl_Thermal:
 
         _ = mplcursors.cursor([frame.ax1, frame.ax2], highlight=True)
         frame.ax1.grid()
-        frame.ax_string["title"].set(", ".join(col_slc1 | col_slc2))
 
-        frame.ax1.set_title(frame.ax_string["title"].get())
+        # get graph option from view
+        self.update_th_fig(False, columns=[col_slc1, col_slc2])
+
+        # other options
         frame.ax1.xaxis.set_major_locator(
             mdates.AutoDateLocator(maxticks=11, minticks=4)
         )
@@ -1715,7 +1824,7 @@ class Ctrl_Thermal:
 
     def _plot(
         self,
-        frame: tk.Frame,
+        frame: TH_TimeSerie,
         x: pd.Series,
         data: str,
         color_c: Iterator,
@@ -1930,12 +2039,29 @@ class Ctrl_Thermal:
         data_ptp.set_index(pd.Series(sub_data.index.array[0]), inplace=True)
         return sub_data, data_mean, data_ptp
 
-    def edit_ax(self):
-        pass  # TODO edit th ax
+    def update_th_fig(self, redraw=False, columns=[{""}, {""}]):
+        frame = self.view.th_plot_frm
 
-    def edit_legend(self):
-        pass  # TODO edit th legeng
+        title = self.view.th_title_ent.get()
+        x_label = self.view.th_x_ent.get()
+        y_label1 = self.view.th_y_ent.get()
+        y_label2 = self.view.th_twiny_ent.get()
+        frame.graph_option.title = title if title != "" else ", ".join(columns[0] | columns[1])
+        frame.graph_option.x_axis = x_label
+        frame.graph_option.y_axis = [y_label1, y_label2]
+        if redraw:
+            frame.update()
 
+    def th_add_line(self, direction: Literal["x", "y"], value: float, axis: int = 1):
+        frame = self.view.th_plot_frm
+        match [direction, axis]:
+            case ["x", 1]:
+                frame.ax1.axhline(y=value, color="black", linestyle="--")
+            case ["x", 2]:
+                frame.ax2.axhline(y=value, color="black", linestyle="--")
+            case ["y", _]:
+                frame.ax1.axvline(x=value, color="black", linestyle="--")
+        frame.canvas.draw_idle()
 
 class Ctrl_LifeTest:  # TODO compare
     model: Model
