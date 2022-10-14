@@ -66,68 +66,130 @@ lifetest:
 
 thermal:
   DEFAULT:
-  - L ph.R Coil bottom (A)
-  - L ph.S Coil bottom (A)
-  - L ph.T Coil bottom (A)
-  - L ph.T Coil bottom (B)
-  - L ph.S Coil bottom (B)]
-  - L ph.R Coil bottom (B)
-  - L ph.R Core(A)
-  - L ph.S Core(A)
-  - L ph.T Core(A)
-  - L ph.R Core(B)
-  - L ph.S Core(B)
-  - L ph.T Core(B)
-  - C12 (B)
-  - C19 (B)
-  - 013_L ph.R Coil surface (Fan outlet side) (B)
-  - Ambient C16-C12 (B)
-  - Ambient C16-L2 (B)]
-  - Connector L ph.R (Fan outlet side) (B)
-  - C16 (B)
-  - Connector L ph.T (Fan outlet side) (B)
-  - C14 (B)
-  - Heatsink ph.R (B)
-  - Welding connection L ph.R (B)
-  - C202(B)
-  - C13 (B)
-  - Ambient C13-C17 (B)
-  - Heatsink ph.T (B)
-  - Ambient C20-K6 (A)
-  - Ambient C25-C19 (A)]
-  - C20 (A)
-  - C8 (A)
-  - Filter L2 (A)
-  - Filter L3 (A)
-  - C19 (A)
-  - Aux Transformer - Logic Board
-  - DSP case - Logic Board
-  - C8 (B)
-  - C20 (B)
-  - Ambient C8-K6 (B)
-  - C19 (B)
-  - Ambient C16 (A)
-  - C20 (A)
-  - C13 (A)
-  - Ambient C13 (A)
-  - C7 (A)]
-  - C21 (A)
-  - Ambient C32-C25 (A)
-  - Ambient C16-C12 (A)
-  - Ambient C20-C26 (A)
-  - Tambient
-  - Air outlet SX (A)
-  - Air outlet Central (A)
-  - Air outlet DX (A)
-  - Current sensor ph.S (A)
-  - Ambient E-Cap centrale Vrel (B)
-  - K6 panasonic contact (B)
-  - K6 panasonic coil (B)
-  - K6 HongFa Contact PCB (A)
-  - Ambient C8-C9 (A)
-  - K2 panasonic contact (B)
-  - K2 panasonic coil (B)
-  - K2 Zettler contact PCB (A)
-  - C16 (A)
-  - Welding connection L ph.R (Fan Inlet Side) (B)
-  - Welding connection L ph.S (Fan Outlet Side) (B)
+  - T ambient
+  - Amb DC fuse left (Combo1)
+  - DC fuse body left (Combo1)
+  - DC contactor left (Combo1)
+  - Outlet bar left (Combo1)
+  - Amb DC fuse right (Combo0)
+  - DC fuse body right (Combo0)
+  - DC contactor right (Combo0)
+  - Outlet bar right (Combo0)
+  - AC fuse
+  - Amb AC fuse
+  - Amb DC filter mid
+  - Amb AC copper bar
+  - Fan top outlet AC side
+  - Fan top outlet board side
+  - Fan top outlet DC side
+  - T ambient board side
+  - Amb AC side top
+  - Amb DC contactor
+  - Amb DC side top
+  - Amb DC side down
+  - Amb chimney top (Inlet top fans)
+  - Amb chimney bottom
+  - Amb CPU
+  - Amb top chiller
+  - PM_1 inlet
+  - PM_2 inlet
+  - PM_3 inlet
+  - PM_4 inlet
+  - PM_5 inlet
+  - PM_6 inlet
+  - PM_7 inlet
+  - PM_8 inlet
+  - PM_9 inlet
+  - PM_10 inlet
+  - PM_11 inlet
+  - PM_12 inlet
+  - PM_1 outlet
+  - PM_2 outlet
+  - PM_3 outlet
+  - PM_4 outlet
+  - PM_5 outlet
+  - PM_6 outlet
+  - PM_7 outlet
+  - PM_8 outlet
+  - PM_9 outlet
+  - PM_10 outlet
+  - PM_11 outlet
+  - PM_12 outlet
+  - Amb CCB3
+  - Amb meter
+  - Amb PSU
+  - Old Filter-Ambient Outlet
+  - Old Filter-Outlet terminal
+  - Old Filter-Coil Ext Inductor
+  - Old Filter-Core Differential Inductor
+  - Old Filter-Film Capacitor
+  - Old Filter-Outlet Inlet
+  - Old Filter-Coil Int Inductor
+  - Mid PM - Air Outlet cavity filters 
+  - Top PM - Air Inlet cavity filters
+  - New Filter-Coil Int Inductor
+  - New Filter-Ambient Outlet
+  - New Filter-Film capacitor1
+  - New Filter-Film capacitor2
+  - New Filter-Core Differential Inductor
+  - New Filter-Coil Inductor
+  - New Filter-Packed Coil Differential Inductor
+  - New Filter-Unpacked Coil Differential Inductor
+  - Mid PM - Air Inlet cavity filters 
+  - Top PM - Air Outlet cavity filters 
+  - Bottom PM - Air Outlet cavity filters 
+  - Tconn1_ 0
+  - Tconn2_ 0
+  - Tconn1_ 1
+  - Tconn2_ 1
+  - Temp_CCB
+  - Temp1
+  - Temp2
+  - Tinlet PM1
+  - T PFC PM1
+  - T DCDC1 PM1
+  - T DCDC2 PM1
+  - Tinlet PM2
+  - T PFC PM2
+  - T DCDC1 PM2
+  - T DCDC2 PM2
+  - Tinlet PM3
+  - T PFC PM3
+  - T DCDC1 PM3
+  - T DCDC2 PM3
+  - Tinlet PM4
+  - T PFC PM4
+  - T DCDC1 PM4
+  - T DCDC2 PM4
+  - Tinlet PM5
+  - T PFC PM5
+  - T DCDC1 PM5
+  - T DCDC2 PM5
+  - Tinlet PM6
+  - T PFC PM6
+  - T DCDC1 PM6
+  - T DCDC2 PM6
+  - Tinlet PM7
+  - T PFC PM7
+  - T DCDC1 PM7
+  - T DCDC2 PM7
+  - Tinlet PM8
+  - T PFC PM8
+  - T DCDC1 PM8
+  - T DCDC2 PM8
+  - Tinlet PM9
+  - T PFC PM9
+  - T DCDC1 PM9
+  - T DCDC2 PM9
+  - Tinlet PM10
+  - T PFC PM10
+  - T DCDC1 PM10
+  - T DCDC2 PM10
+  - Tinlet PM11
+  - T PFC PM11
+  - T DCDC1 PM11
+  - T DCDC2 PM11
+  - Tinlet PM12
+  - T PFC PM12
+  - T DCDC1 PM12
+  - T DCDC2 PM12

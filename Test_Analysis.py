@@ -323,6 +323,8 @@ class View(ttk.Frame):
         self.th_plot_frm.grid(row=0, column=2, columnspan=4, sticky="nsew")
 
         # ----- RESULT FRAME ----- #
+        self.index_lbl = ttk.Label(graph_frm, text="Samples:")
+        self.index_lbl.grid(row=1, column=2, padx=5)
         self.debug_res = Sheet(
             graph_frm,
             width=600,
@@ -334,7 +336,7 @@ class View(ttk.Frame):
         )
         self.debug_res.row_index(["MEAN"])
         self.debug_res.enable_bindings()
-        self.debug_res.grid(row=1, column=2, columnspan=4, sticky="nswe")
+        self.debug_res.grid(row=1, column=3, columnspan=3, sticky="nswe")
 
         graph_frm.rowconfigure(0, weight=1)
         graph_frm.columnconfigure(5, weight=1)
@@ -355,7 +357,7 @@ class View(ttk.Frame):
             data=[],
             total_columns=3,
             show_x_scrollbar=True,
-            show_y_scrollbar=False,
+            show_y_scrollbar=True,
         )
         # self.detail_res.row_index(["MEAN", "MAX", "MIN"])
         self.detail_res.enable_bindings()
@@ -370,7 +372,7 @@ class View(ttk.Frame):
             data=[],
             total_columns=3,
             show_x_scrollbar=True,
-            show_y_scrollbar=False,
+            show_y_scrollbar=True,
         )
         # self.all_res.row_index(["MEAN", "MAX", "MIN"])
         self.all_res.enable_bindings()
@@ -447,7 +449,7 @@ class View(ttk.Frame):
     def _th_graph_update(self):
         if self.controller:
             self.controller.update_th_fig(True)
-            
+
     def _th_graph_xline(self):
         if self.controller:
             self.controller.th_add_line(
@@ -1890,7 +1892,8 @@ class Ctrl_Thermal:
             if key in col_selected
         ]
         row_index_p = [key for key in result.keys() if key in col_selected]
-
+        
+        self.view.index_lbl.configure(text=f"Samples: {index[1]-index[0]}")
         self.view.debug_res.total_columns(number=len(row_index_p))
         self.view.debug_res.headers(newheaders=row_index_p)
         self.view.debug_res.set_sheet_data(
@@ -2080,6 +2083,7 @@ class Ctrl_Thermal:
             case ["y", _]:
                 frame.ax1.axvline(x=value, color="black", linestyle="--")
         frame.canvas.draw_idle()
+
 
 class Ctrl_LifeTest:  # TODO compare
     model: Model
@@ -2546,6 +2550,7 @@ class Controller(Ctrl_Thermal, Ctrl_LifeTest):
         self.view.th_plot_frm.clear()
 
         self.view.debug_res.set_sheet_data(data=[[]])
+        self.view.index_lbl.configure(text=f"Samples: ")
 
         # TODO clear result
         self.view.thermal.tab(1, state="disabled")
