@@ -1277,6 +1277,8 @@ class Model:
          for i in ("Time", "RelTime", "Condition")]
         temp_data.dropna(axis=1, how="all", inplace=True)
 
+        # replace value equal to 0 value with bfill, limit 1 consecutive
+        temp_data.replace(0, None, method='bfill', limit=1, inplace=True)
         # replace str value in object columns (mixed type) to float (or NaN)
         obj_col = temp_data.select_dtypes("object").columns.to_list()
         for col in obj_col:
