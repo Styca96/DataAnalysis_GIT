@@ -557,7 +557,8 @@ class Checklist(ttk.Frame):
         self.selected = tk.StringVar()
         self._slct_lstbx = ScrolledListbox(self,
                                            listvariable=self.selected,
-                                           exportselection=False
+                                           exportselection=False,
+                                           selectmode=tk.MULTIPLE
                                            )
         self._slct_lstbx.grid(row=2, column=1, padx=25, sticky="nsew")
         self.__remove_btn_img = tksvg.SvgImage(
@@ -620,11 +621,12 @@ class Checklist(ttk.Frame):
         idx = self._slct_lstbx.listbox.curselection()
         if idx == ():
             return
-        val = self._slct_lstbx.listbox.get(*idx)
-        self._slct_lstbx.listbox.delete(*idx)
-        self._listbox.listbox.selection_clear(
-            self._listbox.listbox.get(0, tk.END).index(val)
-            )
+        for id in idx[-1::-1]  :
+            val = self._slct_lstbx.listbox.get(id)
+            self._slct_lstbx.listbox.delete(id)
+            self._listbox.listbox.selection_clear(
+                self._listbox.listbox.get(0, tk.END).index(val)
+                )
         if self.get() == ():
             self.all_btn.config(text="Select All")    
 

@@ -209,6 +209,13 @@ class View(ttk.Frame):
                                           state="disabled", width=20)
         self.th_analysis_btn.grid(row=1, column=0, columnspan=2,
                                   pady=(0, 20), ipady=5)
+        self.th_export_btn = ttk.Button(button_frm, text="EXPORT MERGE",
+                                          bootstyle="success-bold",
+                                        #   image="analysis", compound="right",
+                                          command=self._export_th_click,
+                                          state="disabled", width=20)
+        self.th_export_btn.grid(row=2, column=0, columnspan=2,
+                                pady=(0, 20), ipady=5)
 
         # ----- OPTION FRAME ----- #
         option_frm = CollapsingFrame(visual_opt_frm)
@@ -445,6 +452,10 @@ class View(ttk.Frame):
     def _analisi_th_click(self):
         if self.controller:
             self.controller.analysis_th()
+
+    def _export_th_click(self):
+        if self.controller:
+            self.controller.export_thermal_data(True)
 
     def _th_graph_update(self):
         if self.controller:
@@ -1826,7 +1837,8 @@ class Ctrl_Thermal:
         frame._createSpan()
         frame.canvas.draw_idle()
         # altri aggiornamenti
-        self.view.th_analysis_btn["state"] = "normal"
+        self.view.th_analysis_btn.configure(state="normal")
+        self.view.th_export_btn.configure(state="disabled")
 
     def _plot(
         self,
@@ -1873,6 +1885,7 @@ class Ctrl_Thermal:
         if self.view.show_mean_th.get():
             self.__analisi_plot(col_slc1, col_slc2)
         self.view.thermal.tab(1, state="normal")
+        self.view.th_export_btn.configure(state="normal")
 
     def __analisi_data(self, col_list: list, col_selected: list):
         """Handle data elaboration and show result\n
@@ -2546,7 +2559,8 @@ class Controller(Ctrl_Thermal, Ctrl_LifeTest):
         """Clear thermal tab"""
         self.view.frm_option.clear_list()
         self.view.twin_y.clear_list()
-        self.view.th_analysis_btn["state"] = "disabled"
+        self.view.th_analysis_btn.configure(state="disabled")
+        self.view.th_export_btn.configure(state="disabled")
         self.view.th_plot_frm.clear()
 
         self.view.debug_res.set_sheet_data(data=[[]])
