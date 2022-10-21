@@ -560,6 +560,7 @@ class Checklist(ttk.Frame):
                                            exportselection=False,
                                            selectmode=tk.MULTIPLE
                                            )
+        self._slct_lstbx.hide_selection = []
         self._slct_lstbx.grid(row=2, column=1, padx=25, sticky="nsew")
         self.__remove_btn_img = tksvg.SvgImage(
             file=f"{APP_PATH}/rsc/arrow-left.svg"
@@ -594,6 +595,7 @@ class Checklist(ttk.Frame):
 
         self.insert(data, new_selection)
         self.values = original_data
+        self._slct_lstbx.hide_selection = [x for x in actual_selection if x not in new_selection]
         self.selected.set(actual_selection)
         self.search_ent.focus_set()
 
@@ -602,8 +604,9 @@ class Checklist(ttk.Frame):
         sel_items = []
         for i in event.widget.curselection():
             sel_items.append(event.widget.get(i))
-            self.all_btn.config(text="Remove All")
-        self.selected.set(sel_items)
+        self.all_btn.config(text="Remove All")
+        items = [x for x in self.values if x in sel_items + self._slct_lstbx.hide_selection]
+        self.selected.set(items)
 
     def _all_none(self):
         """Select or Remove All"""
@@ -624,9 +627,12 @@ class Checklist(ttk.Frame):
         for id in idx[-1::-1]  :
             val = self._slct_lstbx.listbox.get(id)
             self._slct_lstbx.listbox.delete(id)
-            self._listbox.listbox.selection_clear(
-                self._listbox.listbox.get(0, tk.END).index(val)
-                )
+            if val in self._slct_lstbx.hide_selection:
+                self._slct_lstbx.hide_selection.remove(val)
+            else:
+                self._listbox.listbox.selection_clear(
+                    self._listbox.listbox.get(0, tk.END).index(val)
+                    )
         if self.get() == ():
             self.all_btn.config(text="Select All")    
 
