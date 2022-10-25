@@ -204,9 +204,8 @@ thermal:
   - T DCDC1 PM12
   - T DCDC2 PM12
   New Set Name:
-  - Vout_SP_0
-  - Iout_SP_0
-  - Vout_1
+  - '1'
+  - Fan_PI_output
   SETUP_1:
   - Tinlet PM1
   - T PFC PM1

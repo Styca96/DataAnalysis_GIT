@@ -30,8 +30,10 @@ from utils import (APP_PATH, Checklist, CollapsingFrame, Menubar, MyTree, Placeh
 
 # plt.style.use('seaborn')
 rcParams["date.epoch"] = "2022-01-01T00:00:00"
-rcParams["date.autoformatter.hour"] = "%d %H:%M:%S"
-rcParams["date.autoformatter.minute"] = "%H:%M:%S"
+rcParams["date.autoformatter.day"] = "%d %H"
+rcParams["date.autoformatter.hour"] = "%d-%H:%M"
+rcParams["date.autoformatter.minute"] = "%d-%H:%M:%S"
+rcParams["date.autoformatter.second"] = "%d-%H:%M:%S"
 rcParams["axes.autolimit_mode"] = "round_numbers"
 
 
@@ -1725,8 +1727,10 @@ class Ctrl_Thermal:
         self.update_th_fig(False, columns=[col_slc1, col_slc2])
 
         # other options
-        frame.ax1.xaxis.set_major_locator(mdates.AutoDateLocator(maxticks=11, minticks=4))
-        frame.ax1.xaxis.set_major_formatter(mdates.DateFormatter("%H:%M:%S"))
+        _loc = mdates.AutoDateLocator(minticks=4, maxticks=9)
+        _form = mdates.AutoDateFormatter(_loc)
+        frame.ax1.xaxis.set_major_locator(_loc)
+        frame.ax1.xaxis.set_major_formatter(_form)
         plt.margins(0.01, 0.01)
         plt.rcParams["axes.autolimit_mode"] = "round_numbers"
         frame.ax1.autoscale(enable=True, axis="y", tight=False)
@@ -1988,78 +1992,6 @@ class Ctrl_Thermal:
                 frame.ax1.axvline(x=value, color="black", linestyle="--")
         frame.canvas.draw_idle()
 
-    def create_preset(self, thermal:bool):
-        if self.view.frm_option.values:
-            self.select_preset(thermal, save=True)
-
-    def select_preset(self, thermal:bool=True, save:bool=False):
-        mode = "thermal" if thermal else "lifetest"
-
-        with open(f"{APP_PATH}\\preset.yaml", "r") as f:
-            preset = yaml.safe_load(f)
-            th_preset = preset[mode]
-        root = ttk.Toplevel()
-        listb = tk.Listbox(
-            root, selectmode=tk.SINGLE, height=len(th_preset), width=20
-        )  # create Listbox
-        for x in th_preset:
-            listb.insert(tk.END, x)
-        listb.pack(padx=2, pady=2)  # put listbox on window
-        if save:  # save new
-            root.title=f"Save your actual selection as {mode.capitalize()} Preset"
-            ttk.Label(root, text="or insert new one").pack(pady=5)
-            ent = PlaceholderEntry(root, placeholder="New Set Name", width=20)
-            ent.bind("<Key>",
-                     lambda *_: listb.selection_clear(0, tk.END) if ent.get()!=ent._ph else None,
-                     add="+")
-            ent.pack()
-            btn = tk.Button(
-                root, text="SAVE",
-                command=lambda wd=root, lb=listb, ent=ent, mode=mode:
-                    self.__save_preset(wd, lb, ent, mode)
-                    )
-            btn.pack(padx=2, pady=2)
-        else:  # select
-            root.title=f"Select your {mode.capitalize()} Preset"
-            btn = tk.Button(
-                root, text="SET", command=lambda wd=root, lb=listb: self.__select_th_preset(wd, lb)
-            )
-            btn.pack()
-
-    def __select_th_preset(self, wd: ttk.Toplevel, lb: tk.Listbox):
-        idx = lb.curselection()
-        sel_preset = lb.get(idx)
-        with open(f"{APP_PATH}\\preset.yaml", "r") as f:
-            preset = yaml.safe_load(f)
-            th_preset = preset["thermal"][sel_preset]
-        def_col = [
-            i.strip().replace(" ", "_").replace("(", "").replace(")", "").replace(",", "")
-            for i in th_preset
-        ]
-        available = self.view.frm_option.values
-        self.view.frm_option.clear_list()
-        self.view.frm_option.insert(available=available, selected=def_col)
-        wd.destroy()
-
-    def __save_preset(self, wd:ttk.Toplevel, lb:tk.Listbox, ent:ttk.Entry, mode:str):
-        if lb.curselection() != ():
-            idx = lb.curselection()
-            new_name = lb.get(idx)
-        else:
-            new_name = ent.get()
-        new_preset = self.view.frm_option.get()
-
-        with open(f"{APP_PATH}\\preset.yaml", "r") as f:
-            preset = yaml.safe_load(f)
-        actual_presets = preset[mode]
-        actual_presets[new_name] = new_preset
-        preset[mode] = actual_presets
-        with open(f"{APP_PATH}\\preset.yaml", "w") as f:
-            yaml.safe_dump(preset, f)
-
-        wd.destroy()
-
-
 
 class Ctrl_LifeTest:  # TODO compare
     model: Model
@@ -2257,8 +2189,8 @@ class Ctrl_LifeTest:  # TODO compare
         timeseries_tab.ax.grid()
         timeseries_tab.ax.legend()
 
-        self._loc = mdates.AutoDateLocator(minticks=3, maxticks=11)
-        self._form = mdates.AutoDateFormatter(self._loc, defaultfmt="%H:%M:%S")
+        self._loc = mdates.AutoDateLocator(minticks=4, maxticks=9)
+        self._form = mdates.AutoDateFormatter(self._loc)
         timeseries_tab.ax.xaxis.set_major_locator(self._loc)
 
         timeseries_tab.ax.xaxis.set_major_formatter(self._form)
@@ -2512,6 +2444,77 @@ class Controller(Ctrl_Thermal, Ctrl_LifeTest):
                 box_message += f"{module_broke[i]}: controllare indici {index_broke[i]}\n"
             message = box_title + box_message
             self.view.show_warning(message)
+
+    def create_preset(self, thermal:bool):
+        if self.view.frm_option.values:
+            self.select_preset(thermal, save=True)
+
+    def select_preset(self, thermal:bool=True, save:bool=False):
+        mode = "thermal" if thermal else "lifetest"
+
+        with open(f"{APP_PATH}\\preset.yaml", "r") as f:
+            preset = yaml.safe_load(f)
+            th_preset = preset[mode]
+        root = ttk.Toplevel()
+        listb = tk.Listbox(
+            root, selectmode=tk.SINGLE, height=len(th_preset), width=20
+        )  # create Listbox
+        for x in th_preset:
+            listb.insert(tk.END, x)
+        listb.pack(padx=2, pady=2)  # put listbox on window
+        if save:  # save new
+            root.title=f"Save your actual selection as {mode.capitalize()} Preset"
+            ttk.Label(root, text="or insert new one").pack(pady=5)
+            ent = PlaceholderEntry(root, placeholder="New Set Name", width=20)
+            ent.bind("<Key>",
+                     lambda *_: listb.selection_clear(0, tk.END) if ent.get()!=ent._ph else None,
+                     add="+")
+            ent.pack()
+            btn = tk.Button(
+                root, text="SAVE",
+                command=lambda wd=root, lb=listb, ent=ent, mode=mode:
+                    self.__save_preset(wd, lb, ent, mode)
+                    )
+            btn.pack(padx=2, pady=2)
+        else:  # select
+            root.title=f"Select your {mode.capitalize()} Preset"
+            btn = tk.Button(
+                root, text="SET", command=lambda wd=root, lb=listb: self.__select_th_preset(wd, lb)
+            )
+            btn.pack()
+
+    def __save_preset(self, wd:ttk.Toplevel, lb:tk.Listbox, ent:ttk.Entry, mode:str):
+        if lb.curselection() != ():
+            idx = lb.curselection()
+            new_name = lb.get(idx)
+        else:
+            new_name = ent.get()
+        new_preset = self.view.frm_option.get()
+
+        with open(f"{APP_PATH}\\preset.yaml", "r") as f:
+            preset = yaml.safe_load(f)
+        actual_presets = preset[mode]
+        actual_presets[new_name] = new_preset
+        preset[mode] = actual_presets
+        with open(f"{APP_PATH}\\preset.yaml", "w") as f:
+            yaml.safe_dump(preset, f)
+
+        wd.destroy()
+
+    def __select_th_preset(self, wd: ttk.Toplevel, lb: tk.Listbox):
+        idx = lb.curselection()
+        sel_preset = lb.get(idx)
+        with open(f"{APP_PATH}\\preset.yaml", "r") as f:
+            preset = yaml.safe_load(f)
+            th_preset = preset["thermal"][sel_preset]
+        def_col = [
+            i.strip().replace(" ", "_").replace("(", "").replace(")", "").replace(",", "")
+            for i in th_preset
+        ]
+        available = self.view.frm_option.values
+        self.view.frm_option.clear_list()
+        self.view.frm_option.insert(available=available, selected=def_col)
+        wd.destroy()
 
 
 def on_closing() -> Messagebox:
