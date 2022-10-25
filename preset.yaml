@@ -1,30 +1,4 @@
 lifetest:
-  THOR:
-  - Temp
-  - Tinlet_PM1
-  - T_PFC_PM1
-  - T_DCDC1_PM1
-  - T_DCDC2_PM1
-  - Tinlet_PM2
-  - T_PFC_PM2
-  - T_DCDC1_PM2
-  - T_DCDC2_PM2
-  - Tinlet_PM3
-  - T_PFC_PM3
-  - T_DCDC1_PM3
-  - T_DCDC2_PM3
-  - Tinlet_PM4
-  - T_PFC_PM4
-  - T_DCDC1_PM4
-  - T_DCDC2_PM4
-  - Tinlet_PM5
-  - T_PFC_PM5
-  - T_DCDC1_PM5
-  - T_DCDC2_PM5
-  - Tinlet_PM6
-  - T_PFC_PM6
-  - T_DCDC1_PM6
-  - T_DCDC2_PM&
   JASMINE:
   - Temp
   - Tinlet_PM1
@@ -57,13 +31,49 @@ lifetest:
   - T_PFC_PM3
   - T_DCDC1_PM3
   - T_DCDC2_PM3
+  New Set Name:
+  - Vout_0
+  - Iout_0
+  - Pout_0
+  - Vout_SP_0
+  - Iout_SP_0
+  - Vout_1
+  - Iout_1
+  - Pout_1
+  - Vout_SP_1
+  - Iout_SP_1
+  THOR:
+  - Temp
+  - Tinlet_PM1
+  - T_PFC_PM1
+  - T_DCDC1_PM1
+  - T_DCDC2_PM1
+  - Tinlet_PM2
+  - T_PFC_PM2
+  - T_DCDC1_PM2
+  - T_DCDC2_PM2
+  - Tinlet_PM3
+  - T_PFC_PM3
+  - T_DCDC1_PM3
+  - T_DCDC2_PM3
+  - Tinlet_PM4
+  - T_PFC_PM4
+  - T_DCDC1_PM4
+  - T_DCDC2_PM4
+  - Tinlet_PM5
+  - T_PFC_PM5
+  - T_DCDC1_PM5
+  - T_DCDC2_PM5
+  - Tinlet_PM6
+  - T_PFC_PM6
+  - T_DCDC1_PM6
+  - T_DCDC2_PM&
   THOR_365:
   - Temp
   - Tinlet_PM1
   - T_PFC_PM1
   - T_DCDC1_PM1
   - T_DCDC2_PM1
-
 thermal:
   DEFAULT:
   - T ambient
@@ -125,7 +135,7 @@ thermal:
   - Old Filter-Film Capacitor
   - Old Filter-Outlet Inlet
   - Old Filter-Coil Int Inductor
-  - Mid PM - Air Outlet cavity filters 
+  - Mid PM - Air Outlet cavity filters
   - Top PM - Air Inlet cavity filters
   - New Filter-Coil Int Inductor
   - New Filter-Ambient Outlet
@@ -135,9 +145,9 @@ thermal:
   - New Filter-Coil Inductor
   - New Filter-Packed Coil Differential Inductor
   - New Filter-Unpacked Coil Differential Inductor
-  - Mid PM - Air Inlet cavity filters 
-  - Top PM - Air Outlet cavity filters 
-  - Bottom PM - Air Outlet cavity filters 
+  - Mid PM - Air Inlet cavity filters
+  - Top PM - Air Outlet cavity filters
+  - Bottom PM - Air Outlet cavity filters
   - Tconn1_ 0
   - Tconn2_ 0
   - Tconn1_ 1
@@ -193,3 +203,24 @@ thermal:
   - T PFC PM12
   - T DCDC1 PM12
   - T DCDC2 PM12
+  New Set Name:
+  - Vout_SP_0
+  - Iout_SP_0
+  - Vout_1
+  SETUP_1:
+  - Tinlet PM1
+  - T PFC PM1
+  - T DCDC1 PM1
+  - T DCDC2 PM1
+  - Tinlet PM2
+  - T PFC PM2
+  - T DCDC1 PM2
+  - T DCDC2 PM2
+  - Tinlet PM3
+  - T PFC PM3
+  - T DCDC1 PM3
+  - T DCDC2 PM3
+  - Tinlet PM4
+  - T PFC PM4
+  - T DCDC1 PM4
+  - T DCDC2 PM4

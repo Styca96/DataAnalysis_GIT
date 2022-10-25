@@ -25,9 +25,8 @@ from ttkbootstrap import font
 from ttkbootstrap.dialogs import Messagebox
 
 import func_numba as fnb
-from utils import (APP_PATH, Checklist, CollapsingFrame, Menubar, MyTree,
-                   PlaceholderEntry, ScrollFrame, Slider, Statusbar,
-                   all_children, read_functions, retag)
+from utils import (APP_PATH, Checklist, CollapsingFrame, Menubar, MyTree, PlaceholderEntry,
+                   ScrollFrame, Slider, Statusbar, all_children, read_functions, retag)
 
 # plt.style.use('seaborn')
 rcParams["date.epoch"] = "2022-01-01T00:00:00"
@@ -43,12 +42,11 @@ class DataAnalysis(ttk.Window):
         super().__init__(
             title="DataAnalysis",
             iconphoto=None,
-            themename='abbtheme',
+            themename="abbtheme",
             size=(1250, 855),
             minsize=(1250, 855),
         )
-        self.iconphoto(True, tksvg.SvgImage(file=f"{APP_PATH}/rsc/trello.svg",
-                                            height=24, width=24))
+        self.iconphoto(True, tksvg.SvgImage(file=f"{APP_PATH}/rsc/trello.svg", height=24, width=24))
         self.state("zoomed")
         self.bind_all("<Button-1>", lambda event: event.widget.focus_set())
         self._style_mod()
@@ -83,32 +81,29 @@ class DataAnalysis(ttk.Window):
         # self.parent.style.configure('my.Round.Toggle',
         #                             font=50)
         # notebook style
-        self.style.configure('v.TNotebook',
-                             tabposition='wn',
-                             padding=2,
-                             tabmargins=[2, 5, 2, 0])
-        self.style.map("v.TNotebook.Tab",
-                       background=[("selected", "#f2f2f2"),
-                                   ("!selected", "#a9afb6")
-                                   ],
-                       padding=[("selected",
-                                 (10,  self.winfo_screenmmheight())),
-                                ("!selected",
-                                (10,  self.winfo_screenmmheight()//2))],
-                       compound=[(None, tk.TOP)]
-                       )
+        self.style.configure("v.TNotebook", tabposition="wn", padding=2, tabmargins=[2, 5, 2, 0])
+        self.style.map(
+            "v.TNotebook.Tab",
+            background=[("selected", "#f2f2f2"), ("!selected", "#a9afb6")],
+            padding=[
+                ("selected", (10, self.winfo_screenmmheight())),
+                ("!selected", (10, self.winfo_screenmmheight() // 2)),
+            ],
+            compound=[(None, tk.TOP)],
+        )
 
-        self.style.configure('My.success.Treeview', rowheight=35)
-        self.style.configure('My.success.Treeview.Heading',
-                             font=font.Font(font=("ABBvoice", 12, "bold")),
-                             anchor=tk.NW,
-                             borderwidth=2,
-                             relief='raised',
-                             lightcolor=self.style.colors.success,
-                             darkcolor=self.style.colors.success,
-                             bordercolor=self.style.colors.bg,
-                             padding=(5, 10, 5, 10)
-                             )
+        self.style.configure("My.success.Treeview", rowheight=35)
+        self.style.configure(
+            "My.success.Treeview.Heading",
+            font=font.Font(font=("ABBvoice", 12, "bold")),
+            anchor=tk.NW,
+            borderwidth=2,
+            relief="raised",
+            lightcolor=self.style.colors.success,
+            darkcolor=self.style.colors.success,
+            bordercolor=self.style.colors.bg,
+            padding=(5, 10, 5, 10),
+        )
 
 
 class View(ttk.Frame):
@@ -117,39 +112,23 @@ class View(ttk.Frame):
     def __init__(self, parent: DataAnalysis):
         super().__init__(parent)
 
-        self.images = [ # all used image in this file
-            tksvg.SvgImage(
-                file=f"{APP_PATH}/rsc/reset.svg",
-                name='reset'),
-            tksvg.SvgImage(
-                file=f"{APP_PATH}/rsc/eye.svg",
-                name='show_graph'),
-            tksvg.SvgImage(
-                file=f"{APP_PATH}/rsc/activity.svg",
-                name='show_smooth'),
-            tksvg.SvgImage(
-                file=f"{APP_PATH}/rsc/cpu.svg",
-                name='analysis'),
-            tksvg.SvgImage(
-                file=f"{APP_PATH}/rsc/trending-up.svg",
-                name="thermal_tab"),
-            tksvg.SvgImage(
-                file=f"{APP_PATH}/rsc/bar-chart-2.svg",
-                name="lifetest_tab"),
-            tksvg.SvgImage(
-                file=f"{APP_PATH}/rsc/search.svg",
-                name="search"),
-            tksvg.SvgImage(
-                file=f"{APP_PATH}/rsc/cpu.svg",
-                name="cpu")
-            ]
+        self.images = [  # all used image in this file
+            tksvg.SvgImage(file=f"{APP_PATH}/rsc/reset.svg", name="reset"),
+            tksvg.SvgImage(file=f"{APP_PATH}/rsc/eye.svg", name="show_graph"),
+            tksvg.SvgImage(file=f"{APP_PATH}/rsc/activity.svg", name="show_smooth"),
+            tksvg.SvgImage(file=f"{APP_PATH}/rsc/cpu.svg", name="analysis"),
+            tksvg.SvgImage(file=f"{APP_PATH}/rsc/trending-up.svg", name="thermal_tab"),
+            tksvg.SvgImage(file=f"{APP_PATH}/rsc/bar-chart-2.svg", name="lifetest_tab"),
+            tksvg.SvgImage(file=f"{APP_PATH}/rsc/search.svg", name="search"),
+            tksvg.SvgImage(file=f"{APP_PATH}/rsc/cpu.svg", name="cpu"),
+        ]
 
         self.option_wd: LT_ExportOpt | None = None
         self.parent = parent
         self.controller: Controller | None = None
         self.__main_widget()
-        self.__createthermal(self.thermal)      # create thermal tab
-        self.__createlifetest(self.lifetest)    # create lifetest tab
+        self.__createthermal(self.thermal)  # create thermal tab
+        self.__createlifetest(self.lifetest)  # create lifetest tab
 
     def __main_widget(self):
         self.nb = ttk.Notebook(style="v.TNotebook", bootstyle="success")
@@ -161,12 +140,10 @@ class View(ttk.Frame):
         # self.parent.bind("<Configure>", self.conf)
 
         self.thermal = ttk.Notebook(self.nb, bootstyle="success")
-        self.nb.add(self.thermal, text="Thermal", sticky="nsew",
-                    image="thermal_tab")
+        self.nb.add(self.thermal, text="Thermal", sticky="nsew", image="thermal_tab")
 
         self.lifetest = ttk.Notebook(self.nb, bootstyle="success")
-        self.nb.add(self.lifetest, text="LifeTest", sticky="nsew",
-                    image="lifetest_tab")
+        self.nb.add(self.lifetest, text="LifeTest", sticky="nsew", image="lifetest_tab")
 
     def __createthermal(self, thermal: ttk.Notebook):
         # ################################## #
@@ -186,36 +163,51 @@ class View(ttk.Frame):
 
         # ----- BUTTON FRAME ----- #
         button_frm = ttk.Frame(visual_opt_frm, borderwidth=2, relief="raised")
-        button_frm.grid(row=2, column=0, sticky="ew",
-                        padx=10, pady=(20, 10))
+        button_frm.grid(row=2, column=0, sticky="ew", padx=10, pady=(20, 10))
 
-        show_btn = ttk.Button(button_frm, text="SHOW",
-                              bootstyle="success-bold",
-                              image="show_graph", compound="right",
-                              width=18, command=self._show_btn_click)
+        show_btn = ttk.Button(
+            button_frm,
+            text="SHOW",
+            bootstyle="success-bold",
+            image="show_graph",
+            compound="right",
+            width=18,
+            command=self._show_btn_click,
+        )
         show_btn.grid(row=0, column=0, padx=8, pady=20, ipady=5, sticky="w")
 
-        showsmooth_btn = ttk.Button(button_frm, text="SHOW SMOOTH",
-                                    bootstyle="success-bold",
-                                    image="show_smooth", compound="right",
-                                    width=18, command=self._smooth_btn_click)
-        showsmooth_btn.grid(row=0, column=1,
-                            padx=8, pady=20, ipady=5, sticky="e")
+        showsmooth_btn = ttk.Button(
+            button_frm,
+            text="SHOW SMOOTH",
+            bootstyle="success-bold",
+            image="show_smooth",
+            compound="right",
+            width=18,
+            command=self._smooth_btn_click,
+        )
+        showsmooth_btn.grid(row=0, column=1, padx=8, pady=20, ipady=5, sticky="e")
 
-        self.th_analysis_btn = ttk.Button(button_frm, text="ANALYSIS",
-                                          bootstyle="success-bold",
-                                          image="analysis", compound="right",
-                                          command=self._analisi_th_click,
-                                          state="disabled", width=20)
-        self.th_analysis_btn.grid(row=1, column=0, columnspan=2,
-                                  pady=(0, 20), ipady=5)
-        self.th_export_btn = ttk.Button(button_frm, text="EXPORT MERGE",
-                                          bootstyle="success-bold",
-                                        #   image="analysis", compound="right",
-                                          command=self._export_th_click,
-                                          state="disabled", width=20)
-        self.th_export_btn.grid(row=2, column=0, columnspan=2,
-                                pady=(0, 20), ipady=5)
+        self.th_analysis_btn = ttk.Button(
+            button_frm,
+            text="ANALYSIS",
+            bootstyle="success-bold",
+            image="analysis",
+            compound="right",
+            command=self._analisi_th_click,
+            state="disabled",
+            width=20,
+        )
+        self.th_analysis_btn.grid(row=1, column=0, columnspan=2, pady=(0, 20), ipady=5)
+        self.th_export_btn = ttk.Button(
+            button_frm,
+            text="EXPORT MERGE",
+            bootstyle="success-bold",
+            # image="analysis", compound="right",
+            command=self._export_th_click,
+            state="disabled",
+            width=20,
+        )
+        self.th_export_btn.grid(row=2, column=0, columnspan=2, pady=(0, 20), ipady=5)
 
         # ----- OPTION FRAME ----- #
         option_frm = CollapsingFrame(visual_opt_frm)
@@ -233,10 +225,11 @@ class View(ttk.Frame):
             valid_selection = [i for i in twin_y_sel if i in options]
             self.twin_y.clear_list()
             self.twin_y.insert(options, valid_selection)
-        self.frm_option._listbox.listbox.bind("<<ListboxSelect>>",
-                                              lambda *_: update_twin_y(),
-                                              add="+")
-        option_frm.add(child=opt1, title='Twin Y axes')
+
+        self.frm_option._listbox.listbox.bind(
+            "<<ListboxSelect>>", lambda *_: update_twin_y(), add="+"
+        )
+        option_frm.add(child=opt1, title="Twin Y axes")
         opt1.grid_remove()
         opt1.btn.configure(image=option_frm.images[1])
 
@@ -251,7 +244,7 @@ class View(ttk.Frame):
             onvalue=1,
             offvalue=0,
             bootstyle="round-toggle",
-            command=lambda: self.th_plot_frm.show_legend(self.legend_th.get())
+            command=lambda: self.th_plot_frm.show_legend(self.legend_th.get()),
         ).pack(side=tk.TOP, anchor="w", pady=5)
         ttk.Checkbutton(
             opt2,
@@ -260,9 +253,7 @@ class View(ttk.Frame):
             onvalue=1,
             offvalue=0,
             bootstyle="round-toggle",
-            command=lambda: self.th_plot_frm.change_fixed_span(
-                self.fixed_span_th.get()
-                )
+            command=lambda: self.th_plot_frm.change_fixed_span(self.fixed_span_th.get()),
         ).pack(side=tk.TOP, anchor="w", pady=5)
         ttk.Checkbutton(
             opt2,
@@ -270,21 +261,23 @@ class View(ttk.Frame):
             variable=self.show_mean_th,
             onvalue=1,
             offvalue=0,
-            bootstyle="round-toggle"
+            bootstyle="round-toggle",
         ).pack(side=tk.TOP, anchor="w", pady=5)
-        option_frm.add(child=opt2, title='Graph Option', bootstyle="info")
+        option_frm.add(child=opt2, title="Graph Option", bootstyle="info")
         opt2.grid_remove()
         opt2.btn.configure(image=option_frm.images[1])
 
         opt3 = ttk.Frame(option_frm, padding=5)
-        ttk.Label(opt3, text="Title: ", anchor="w"
-                  ).grid(row=0, column=0, padx=5, pady=(5, 0))
-        ttk.Label(opt3, text="X-axis Label: ", anchor="w"
-                  ).grid(row=1, column=0, padx=5, pady=(5, 0))
-        ttk.Label(opt3, text="Y1-axis Label: ", anchor="w"
-                  ).grid(row=2, column=0, padx=5, pady=(5, 0))
-        ttk.Label(opt3, text="Y2-axis Label: ", anchor="w"
-                  ).grid(row=3, column=0, padx=5, pady=(5, 0))
+        ttk.Label(opt3, text="Title: ", anchor="w").grid(row=0, column=0, padx=5, pady=(5, 0))
+        ttk.Label(opt3, text="X-axis Label: ", anchor="w").grid(
+            row=1, column=0, padx=5, pady=(5, 0)
+        )
+        ttk.Label(opt3, text="Y1-axis Label: ", anchor="w").grid(
+            row=2, column=0, padx=5, pady=(5, 0)
+        )
+        ttk.Label(opt3, text="Y2-axis Label: ", anchor="w").grid(
+            row=3, column=0, padx=5, pady=(5, 0)
+        )
         self.th_title_ent = ttk.Entry(opt3)  # PlaceholderEntry(opt3, )
         self.th_title_ent.grid(row=0, column=1)
         self.th_x_ent = ttk.Entry(opt3)  # PlaceholderEntry(opt3, )
@@ -293,28 +286,26 @@ class View(ttk.Frame):
         self.th_y_ent.grid(row=2, column=1)
         self.th_twiny_ent = ttk.Entry(opt3)  # PlaceholderEntry(opt3, )
         self.th_twiny_ent.grid(row=3, column=1)
-        th_update_graph_btn = ttk.Button(opt3, text="Update graph",
-                                         bootstyle="outline-info",
-                                         command=self._th_graph_update)
+        th_update_graph_btn = ttk.Button(
+            opt3, text="Update graph", bootstyle="outline-info", command=self._th_graph_update
+        )
         th_update_graph_btn.grid(row=4, column=0, padx=5, pady=(5, 0))
-        ttk.Label(opt3, text="Horizontal line: ", anchor="w"
-                  ).grid(row=5, column=0, padx=5, pady=(5, 0))
+        ttk.Label(opt3, text="Horizontal line: ", anchor="w").grid(
+            row=5, column=0, padx=5, pady=(5, 0)
+        )
         self.th_x_line = tk.DoubleVar()
-        ttk.Entry(opt3, textvariable=self.th_x_line, width=8
-                  ).grid(row=5, column=1)
+        ttk.Entry(opt3, textvariable=self.th_x_line, width=8).grid(row=5, column=1)
         self.th_n_axis = tk.IntVar(value=1)
-        ttk.Radiobutton(opt3, text='Y1', value=1, variable=self.th_n_axis
-                        ).grid(row=5, column=2)
-        ttk.Radiobutton(opt3, text='Y2', value=2, variable=self.th_n_axis
-                        ).grid(row=5, column=3)
-        th_add_x_line_btn = ttk.Button(opt3, text="ADD",
-                                       bootstyle="outline-info",
-                                       command=self._th_graph_xline)
+        ttk.Radiobutton(opt3, text="Y1", value=1, variable=self.th_n_axis).grid(row=5, column=2)
+        ttk.Radiobutton(opt3, text="Y2", value=2, variable=self.th_n_axis).grid(row=5, column=3)
+        th_add_x_line_btn = ttk.Button(
+            opt3, text="ADD", bootstyle="outline-info", command=self._th_graph_xline
+        )
         th_add_x_line_btn.grid(row=5, column=4, padx=5, pady=(5, 0))
         # TODO add_line to graph
         # self.th_y_line = tk.DoubleVar()
 
-        option_frm.add(child=opt3, title='Edit Graph', bootstyle="success")
+        option_frm.add(child=opt3, title="Edit Graph", bootstyle="success")
         opt3.grid_remove()
         opt3.btn.configure(image=option_frm.images[1])
         # ----- SEPARATOR ----- # # TODO change with PanedWindow
@@ -355,8 +346,7 @@ class View(ttk.Frame):
         thermal.add(result_tab, text="Thermal Result", sticky="nsew", state="disabled")
         result_tab.rowconfigure(1, weight=1)
 
-        ttk.Label(result_tab, text="Selected Column Result"
-                  ).grid(row=0, column=0)
+        ttk.Label(result_tab, text="Selected Column Result").grid(row=0, column=0)
         self.detail_res = Sheet(
             result_tab,
             width=600,
@@ -370,8 +360,7 @@ class View(ttk.Frame):
         self.detail_res.enable_bindings()
         self.detail_res.grid(row=1, column=0, sticky="nswe")
 
-        ttk.Label(result_tab, text="All Column Result"
-                  ).grid(row=0, column=1)
+        ttk.Label(result_tab, text="All Column Result").grid(row=0, column=1)
         self.all_res = Sheet(
             result_tab,
             width=600,
@@ -391,31 +380,35 @@ class View(ttk.Frame):
         lifetest.add(option_tab, text="Cycle Options", sticky="nsew")
 
         self.col_frm = Checklist(option_tab, filter=True)
-        self.col_frm.grid(row=0, column=0, rowspan=2,
-                          pady=5, padx=5, sticky="nsew")
-        ttk.Label(option_tab, text="Soglie:", anchor="nw"
-                  ).grid(row=0, column=1, sticky="new", pady=5, padx=5)
+        self.col_frm.grid(row=0, column=0, rowspan=2, pady=5, padx=5, sticky="nsew")
+        ttk.Label(option_tab, text="Soglie:", anchor="nw").grid(
+            row=0, column=1, sticky="new", pady=5, padx=5
+        )
         self.soglie_txt = ttk.Text(option_tab, width=10, height=13)
-        self.soglie_txt.grid(row=1, column=1,
-                             sticky="nsew", pady=(0, 5), padx=5)
+        self.soglie_txt.grid(row=1, column=1, sticky="nsew", pady=(0, 5), padx=5)
 
         self.cicli_btn = ttk.Button(
-            option_tab, text="CALCOLO CICLI ",
+            option_tab,
+            text="CALCOLO CICLI ",
             command=self._cicli_btn_click,
-            width=18, bootstyle="success-bold",
-            image="search", compound="right"
+            width=18,
+            bootstyle="success-bold",
+            image="search",
+            compound="right",
         )
         self.cicli_btn.grid(row=0, column=2, rowspan=2, ipady=15, padx=60)
 
         self.cicli_result_tv = MyTree(option_tab)
-        self.cicli_result_tv.grid(row=2, column=0, columnspan=2,
-                                  pady=20, sticky="w")
+        self.cicli_result_tv.grid(row=2, column=0, columnspan=2, pady=20, sticky="w")
         self.analysis_btn = ttk.Button(
-            option_tab, text="CYCLE ANALYSIS",
+            option_tab,
+            text="CYCLE ANALYSIS",
             command=self._analysis_lt_click,
-            width=18, bootstyle="success-bold",
-            image="cpu", compound="right",
-            state="disabled"
+            width=18,
+            bootstyle="success-bold",
+            image="cpu",
+            compound="right",
+            state="disabled",
         )
         self.analysis_btn.grid(row=2, column=2, rowspan=2, ipady=15, padx=60)
 
@@ -463,9 +456,7 @@ class View(ttk.Frame):
 
     def _th_graph_xline(self):
         if self.controller:
-            self.controller.th_add_line(
-                "x", self.th_x_line.get(), self.th_n_axis.get()
-                )
+            self.controller.th_add_line("x", self.th_x_line.get(), self.th_n_axis.get())
 
     # ##----messagebox function
     def show_error(self, error: str):
@@ -495,6 +486,7 @@ class Graph_Option:
     def __init__(self, fig, *axisargs) -> None:
         from matplotlib.axes._axes import Axes
         from matplotlib.figure import Figure
+
         self._fig: Figure = fig
         self._axis: tuple[Axes] = axisargs
 
@@ -551,10 +543,7 @@ class Graph_Option:
 class DataDistribution(ttk.Frame):
     """### Distribution Frame"""
 
-    def __init__(self,
-                 master: tk.Misc = ...,
-                 big_fig: bool = False,
-                 **frame_kwargs) -> None:
+    def __init__(self, master: tk.Misc = ..., big_fig: bool = False, **frame_kwargs) -> None:
         """Costruisce Frame per la visualizzazione delle sdistribuzioni\n
         Args:
             -parent (tk.Misc): master del Frame
@@ -583,11 +572,9 @@ class DataDistribution(ttk.Frame):
         imag_frm.pack(side="left", fill="both", expand=1)
 
         # ----- OPT FRAME ----- #
-        ttk.Label(opt_frm, text="Column Name:", anchor="w"
-                  ).pack(side=tk.TOP, fill="x")
+        ttk.Label(opt_frm, text="Column Name:", anchor="w").pack(side=tk.TOP, fill="x")
         self.col_slc = tk.StringVar()
-        self.col_slc_cmb = ttk.Combobox(opt_frm, textvariable=self.col_slc,
-                                        width=30)
+        self.col_slc_cmb = ttk.Combobox(opt_frm, textvariable=self.col_slc, width=30)
         self.col_slc_cmb["state"] = "readonly"
         self.col_slc_cmb.pack(side=tk.TOP)
         self.col_slc_cmb.bind("<<ComboboxSelected>>", self.distr_show)
@@ -603,22 +590,28 @@ class DataDistribution(ttk.Frame):
         val = [(10, 250, 150), (150, 450000, 150), (0, 400000, 0)]
         self.sli_l: list[Slider] = []
         for i in range(len(lbl)):
-            ttk.Label(scale_frm, text=lbl[i], anchor="w"
-                      ).pack(side=tk.TOP, fill="x")
-            s = Slider(scale_frm, command=self.update_value,
-                       scale_kwargs={"from_": val[i][0],
-                                     "to": val[i][1],
-                                     "value": val[i][2],
-                                     "variable": var[i]},)
+            ttk.Label(scale_frm, text=lbl[i], anchor="w").pack(side=tk.TOP, fill="x")
+            s = Slider(
+                scale_frm,
+                command=self.update_value,
+                scale_kwargs={
+                    "from_": val[i][0],
+                    "to": val[i][1],
+                    "value": val[i][2],
+                    "variable": var[i],
+                },
+            )
             s.pack(side=tk.TOP, fill="x", expand=1)
             self.sli_l.append(s)
 
         self.reset_btn = ttk.Button(
-            scale_frm, text="Default Value",
+            scale_frm,
+            text="Default Value",
             bootstyle="success",
-            image="reset", compound=tk.RIGHT,
-            command=lambda var=self.sli_l, val=val: self.reset(var, val)
-            )
+            image="reset",
+            compound=tk.RIGHT,
+            command=lambda var=self.sli_l, val=val: self.reset(var, val),
+        )
         self.reset_btn.pack(side=tk.TOP, fill="x", expand=1, padx=5, pady=5)
 
         # ----- GRAPH FRAME ----- #
@@ -669,10 +662,7 @@ class DataDistribution(ttk.Frame):
 class LT_TimeSerie(ttk.Frame):
     """### LifeTest TIMESERIES Frame"""
 
-    def __init__(self,
-                 master: tk.Misc = ...,
-                 big_fig: bool = False,
-                 **frame_kwargs) -> None:
+    def __init__(self, master: tk.Misc = ..., big_fig: bool = False, **frame_kwargs) -> None:
         """Costruisce Frame per la visualizzazione delle serie temporali\n
         Args:
             -master (tk.Misc): master del Frame
@@ -700,51 +690,56 @@ class LT_TimeSerie(ttk.Frame):
         imag_frm.pack(side="left", fill="both", expand=1)
 
         # ----- OPT FRAME ----- #
-        ttk.Label(opt_frm, text="Column Name:", anchor="w"
-                  ).pack(side=tk.TOP, fill="x")
+        ttk.Label(opt_frm, text="Column Name:", anchor="w").pack(side=tk.TOP, fill="x")
         self.col_slc = tk.StringVar()
-        self.col_slc_cmb = ttk.Combobox(opt_frm, textvariable=self.col_slc,
-                                        width=30)
+        self.col_slc_cmb = ttk.Combobox(opt_frm, textvariable=self.col_slc, width=30)
         self.col_slc_cmb["state"] = "readonly"
         self.col_slc_cmb.pack(side=tk.TOP)
         self.col_slc_cmb.bind("<<ComboboxSelected>>", self.timeseries_show)
 
         self.smoothing = tk.BooleanVar(value=True)
-        self.smooth_btn = ttk.Checkbutton(opt_frm, text="Smoothing",
-                                          padding=2, variable=self.smoothing,
-                                          # bootstyle="secondary",
-                                          command=self.timeseries_show,
-                                          style='my.Round.Toggle'
-                                          )
+        self.smooth_btn = ttk.Checkbutton(
+            opt_frm,
+            text="Smoothing",
+            padding=2,
+            variable=self.smoothing,
+            # bootstyle="secondary",
+            command=self.timeseries_show,
+            style="my.Round.Toggle",
+        )
         self.smooth_btn.pack(side=tk.TOP, fill="x", pady=(20, 5), padx=5)
 
         self.all_fig = tk.BooleanVar(value=True)
-        self.all_fig_onoff = ttk.Checkbutton(opt_frm, text="All figure",
-                                             padding=2, variable=self.all_fig,
-                                             bootstyle="round-toggle")
+        self.all_fig_onoff = ttk.Checkbutton(
+            opt_frm, text="All figure", padding=2, variable=self.all_fig, bootstyle="round-toggle"
+        )
         self.all_fig_onoff.pack(side=tk.TOP, fill="x", padx=5)
-        self.slider = ttk.Meter(opt_frm,
-                                amounttotal=100,
-                                amountused=0,
-                                wedgesize=10,
-                                metersize=150,
-                                bootstyle="info",
-                                metertype="semi",
-                                meterthickness=20,
-                                interactive=True,
-                                stripethickness=10,
-                                textright="%",
-                                subtext="ghaph view",
-                                stepsize=5,
-                                )
+        self.slider = ttk.Meter(
+            opt_frm,
+            amounttotal=100,
+            amountused=0,
+            wedgesize=10,
+            metersize=150,
+            bootstyle="info",
+            metertype="semi",
+            meterthickness=20,
+            interactive=True,
+            stripethickness=10,
+            textright="%",
+            subtext="ghaph view",
+            stepsize=5,
+        )
         self.all_fig_onoff.configure(command=self.all_fig_opt)
 
         retag("special", *all_children(self.slider))
-        self.bind_class("special", '<Left>', lambda *_: self.slider.step(-5)
-                        if self.slider.amountusedvar.get() not in (0, 100)
-                        else None)
-        self.bind_class("special", '<Right>', lambda *_: self.slider.step(+5),
-                        add="+")
+        self.bind_class(
+            "special",
+            "<Left>",
+            lambda *_: self.slider.step(-5)
+            if self.slider.amountusedvar.get() not in (0, 100)
+            else None,
+        )
+        self.bind_class("special", "<Right>", lambda *_: self.slider.step(+5), add="+")
         self.slider.amountusedvar.trace_add("write", self.update_value)
 
         # ----- GRAPH FRAME ----- #
@@ -782,8 +777,8 @@ class LT_TimeSerie(ttk.Frame):
         pos = int(self.getvar(var))
         xmin = self.xlim_min
         xmax = self.xlim_max
-        deltax = (xmax-xmin)/100
-        self.ax.set(xlim=[xmin+deltax*(pos-5), xmin+deltax*(pos+5)])
+        deltax = (xmax - xmin) / 100
+        self.ax.set(xlim=[xmin + deltax * (pos - 5), xmin + deltax * (pos + 5)])
         self.fig.canvas.draw_idle()
         self.canvas.draw_idle()
 
@@ -804,18 +799,14 @@ class LT_TimeSerie(ttk.Frame):
 class LT_ExportOpt(ttk.Toplevel):
     """### LifeTest EXPORT Frame"""
 
-    def __init__(
-        self,
-        parent: View,
-        all_: bool
-    ):
+    def __init__(self, parent: View, all_: bool):
         super().__init__(
             master=parent,
             size=(600, 800),
             # transient=parent,
             topmost=True,
             # toolwindow=True
-            )
+        )
         # self.protocol("WM_DELETE_WINDOW", self.on_closing)
         self.match = {}
         self.parent = parent
@@ -829,8 +820,7 @@ class LT_ExportOpt(ttk.Toplevel):
 
     def _createwidget(self):
         # ##----------------file option----------------
-        ttk.Label(self, text="File Type"
-                  ).grid(row=0, column=0, padx=5, pady=5)
+        ttk.Label(self, text="File Type").grid(row=0, column=0, padx=5, pady=5)
         self.file_option = tk.StringVar()
         self.file_cmb = ttk.Combobox(
             self,
@@ -839,20 +829,18 @@ class LT_ExportOpt(ttk.Toplevel):
         self.file_cmb.grid(row=0, column=1, columnspan=3, padx=5, pady=5)
         self.file_cmb["state"] = "readonly"
         self.file_cmb["values"] = list(self.match.keys())
-        ttk.Button(
-            self, text="CONFIRM", width=20, command=self.confirm_btn_click
-        ).grid(row=0, column=4, padx=5, pady=5)
+        ttk.Button(self, text="CONFIRM", width=20, command=self.confirm_btn_click).grid(
+            row=0, column=4, padx=5, pady=5
+        )
 
         # ##----------------cicli option----------------
         cicli_frm = ttk.Labelframe(self, padding="5", text="Cicli Option")
-        cicli_frm.grid(
-            row=2, column=0, columnspan=5, pady=(10, 0), padx=5, sticky="ew"
-        )
+        cicli_frm.grid(row=2, column=0, columnspan=5, pady=(10, 0), padx=5, sticky="ew")
 
-        ttk.Label(cicli_frm, text="Colonna calcolo cicli (str)"
-                  ).grid(row=0, column=0)
-        ttk.Label(cicli_frm, text="Valore soglia cicli (int)"
-                  ).grid(row=1, column=0, sticky="ew", pady=2)
+        ttk.Label(cicli_frm, text="Colonna calcolo cicli (str)").grid(row=0, column=0)
+        ttk.Label(cicli_frm, text="Valore soglia cicli (int)").grid(
+            row=1, column=0, sticky="ew", pady=2
+        )
         row_ = self.parent.cicli_result_tv.selection()
         val_ = self.parent.cicli_result_tv.item(row_)["values"]
         selected_col: str = val_[0] if val_ != "" else None
@@ -862,21 +850,15 @@ class LT_ExportOpt(ttk.Toplevel):
         else:
             selected_soglia = None
         self.col_cicli = tk.StringVar(value=selected_col)
-        self.col_text = ttk.Entry(
-            cicli_frm, width=30, textvariable=self.col_cicli
-        )
+        self.col_text = ttk.Entry(cicli_frm, width=30, textvariable=self.col_cicli)
         self.col_text.grid(row=0, column=1, columnspan=3)
         self.col_soglia = tk.StringVar(value=selected_soglia)
-        self.soglia_text = ttk.Entry(
-            cicli_frm, width=30, textvariable=self.col_soglia
-        )
+        self.soglia_text = ttk.Entry(cicli_frm, width=30, textvariable=self.col_soglia)
         self.soglia_text.grid(row=1, column=1, columnspan=3, pady=2)
 
         # ##----------------merge option----------------
         merge_frm = ttk.Labelframe(self, padding="5", text="File Option")
-        merge_frm.grid(
-            row=3, column=0, columnspan=5, pady=(10, 0), padx=5, sticky="ew"
-        )
+        merge_frm.grid(row=3, column=0, columnspan=5, pady=(10, 0), padx=5, sticky="ew")
 
         self.merge_option = tk.BooleanVar(value=None)
         self.merge_rb = ttk.Radiobutton(
@@ -897,42 +879,29 @@ class LT_ExportOpt(ttk.Toplevel):
         )
         self.new_rb.grid(row=2, column=3, pady=5)
 
-        ttk.Label(merge_frm, text="Reset Module"
-                  ).grid(row=3, column=0, sticky="ew")
+        ttk.Label(merge_frm, text="Reset Module").grid(row=3, column=0, sticky="ew")
         self.module = tk.StringVar(value="None")
         self.module_cmb = ttk.Combobox(merge_frm, textvariable=self.module)
         self.module_cmb["state"] = "disabled"
         self.module_cmb.grid(row=3, column=1, pady=5)
 
         # ##----------------Distribution option----------------
-        distr_frm = ttk.Labelframe(self, padding="5",
-                                   text="Distribution Option")
-        distr_frm.grid(
-            row=4, column=0, columnspan=5, pady=(10, 0), padx=5, sticky="ew"
-        )
+        distr_frm = ttk.Labelframe(self, padding="5", text="Distribution Option")
+        distr_frm.grid(row=4, column=0, columnspan=5, pady=(10, 0), padx=5, sticky="ew")
         distr_frm.columnconfigure(1, weight=1)
-        ttk.Label(distr_frm, text="Range:"
-                  ).grid(row=0, column=0, sticky="ew")
-        ttk.Label(distr_frm, text="Bar width:"
-                  ).grid(row=1, column=0, sticky="ew")
+        ttk.Label(distr_frm, text="Range:").grid(row=0, column=0, sticky="ew")
+        ttk.Label(distr_frm, text="Bar width:").grid(row=1, column=0, sticky="ew")
         self.range = tk.IntVar()
-        scale_range = Slider(distr_frm,
-                             scale_kwargs={
-                                 "from_": 150.0,
-                                 "to": 450000.0,
-                                 "value": 150.0,
-                                 "variable": self.range
-                                 })
+        scale_range = Slider(
+            distr_frm,
+            scale_kwargs={"from_": 150.0, "to": 450000.0, "value": 150.0, "variable": self.range},
+        )
         scale_range.grid(row=0, column=1, sticky="ew", padx=(10, 0))
 
         self.width_ = tk.IntVar()
-        scale_width = Slider(distr_frm,
-                             scale_kwargs={
-                                 "from_": 1,
-                                 "to": 10000,
-                                 "value": 1,
-                                 "variable": self.width_
-                                 })
+        scale_width = Slider(
+            distr_frm, scale_kwargs={"from_": 1, "to": 10000, "value": 1, "variable": self.width_}
+        )
         scale_width.grid(row=1, column=1, sticky="ew", padx=(10, 0))
 
         # ##----------------Data option----------------
@@ -953,11 +922,7 @@ class LT_ExportOpt(ttk.Toplevel):
 
     def confirm_btn_click(self):
         if self.parent.controller:
-            if Messagebox.okcancel(
-                parent=self,
-                title="Confirm",
-                message="Are you sure?"
-                ) == "OK":
+            if Messagebox.okcancel(parent=self, title="Confirm", message="Are you sure?") == "OK":
                 self.parent.controller.export_all_process(self.all_)
             else:
                 self.focus_set()
@@ -965,17 +930,13 @@ class LT_ExportOpt(ttk.Toplevel):
     def default_col(self, *event):
         self.col_frm.clear_list()
         file_type = self.file_cmb.get()
-        self.col_frm.insert(
-            available=self.match["ALL"], selected=self.match[file_type]
-        )
+        self.col_frm.insert(available=self.match["ALL"], selected=self.match[file_type])
 
 
 class TH_TimeSerie(ttk.Frame):
     """### Thermal TIMESERIES Frame"""
 
-    def __init__(self,
-                 master: tk.Misc = ...,
-                 **frame_kwargs) -> None:
+    def __init__(self, master: tk.Misc = ..., **frame_kwargs) -> None:
         """Costruisce Frame per la visualizzazione delle serie temporali\n
         Args:
             -master (tk.Misc): master del Frame
@@ -1031,10 +992,7 @@ class TH_TimeSerie(ttk.Frame):
         if self.line_mean == {}:
             lines = all_lines[:]
         else:
-            lines = (
-                all_lines[:n_ylines]
-                + all_lines[2 * n_ylines: len(self.line) + n_ylines]
-            )
+            lines = all_lines[:n_ylines] + all_lines[2 * n_ylines : len(self.line) + n_ylines]
         [all_lines.remove(i) for i in lines]
         for legline, origline in zip(lines, self.line):
             legline.set_picker(5)
@@ -1069,10 +1027,10 @@ class TH_TimeSerie(ttk.Frame):
         indmin = self.__find_nearest(self.x_data, xmin_)
 
         if self.fixed_span:
-            indmax = indmin+30
+            indmax = indmin + 30
             xmax_ = self.x_data[indmax].to_pydatetime()
             xmax = mdates.date2num(xmax_)
-            self.span.artists[0].set_bounds(xmin, 0, xmax-xmin, 1)
+            self.span.artists[0].set_bounds(xmin, 0, xmax - xmin, 1)
             # self.span.rect.set_bounds(xmin, 0, xmax-xmin, 1)
             self.span.artists[2].set_xdata((xmax, xmax))
         else:
@@ -1141,9 +1099,7 @@ class Model:
         self.df_rev: pd.DataFrame | None = None  # read revision data
         self.df_lt: pd.DataFrame | None = None  # clean cycle data
         self.cycle_data: dict = {}
-        self.lifetest_analyzed: dict = {"distr": {},
-                                        "NaN": {},
-                                        "timeseries": {}}
+        self.lifetest_analyzed: dict = {"distr": {}, "NaN": {}, "timeseries": {}}
         self.span_data = {}
 
     def file_to_read(self, revision: bool = False) -> tuple[str] | None:
@@ -1190,27 +1146,14 @@ class Model:
         if revision:
             filextension = ("xlsx", "parquet")
         else:
-            filextension = (
-                "xls",
-                "xlsx",
-                "xlsm",
-                "xlsb",
-                "odf",
-                "ods",
-                "odt",
-                "txt",
-                "csv",
-                "log"
-            )
+            filextension = ("xls", "xlsx", "xlsm", "xlsb", "odf", "ods", "odt", "txt", "csv", "log")
 
         if filepath.lower().endswith(filextension):
             pass
         else:
             self.filenames = None
             raise ValueError(
-                "Invalid file extension\n"
-                + "Select from:\n"
-                + ", ".join(filextension)
+                "Invalid file extension\n" + "Select from:\n" + ", ".join(filextension)
             )
 
     def read_file(self, filepath: str, revision: bool = False):
@@ -1222,15 +1165,13 @@ class Model:
             try:
                 if filepath.endswith(".xlsx"):
                     temp_df = pd.read_excel(
-                                            io=filepath,
-                                            sheet_name=0,
-                                            index_col=0,
-                                            skipfooter=1,
-                                            )
+                        io=filepath,
+                        sheet_name=0,
+                        index_col=0,
+                        skipfooter=1,
+                    )
                 elif filepath.endswith(".parquet"):
-                    temp_df = pd.read_parquet(
-                            filepath, engine="fastparquet"
-                        )
+                    temp_df = pd.read_parquet(filepath, engine="fastparquet")
             except Exception as e:
                 raise e
         else:
@@ -1258,7 +1199,7 @@ class Model:
         - Report NaN and Obj_Col\n
         Args:
             data (pd.DataFrame): data
-            revision (bool, optional): Inform if data is raw. Defaults to False.
+            revision (bool, optional): Inform if data is raw. Defaults to False
         """
         temp_data = data.copy()
         # update column names
@@ -1276,28 +1217,26 @@ class Model:
             # temp_data.Date = pd.to_datetime(
             #     temp_data['Date'].astype(str) + " " + temp_data['Time'].astype(str)  # noqa: E501
             #     )
-            temp_data.Date = pd.to_datetime(temp_data['Date'].astype(str), dayfirst=True)
+            temp_data.Date = pd.to_datetime(temp_data["Date"].astype(str), dayfirst=True)
         else:  # new monitor file
-            temp_data.DateTime = pd.to_datetime(temp_data['DateTime'])
+            temp_data.DateTime = pd.to_datetime(temp_data["DateTime"])
             temp_data.rename(columns={"DateTime": "Date"}, inplace=True)
 
-        temp_data.sort_values(
-            "Date", axis=0, ignore_index=True, inplace=True
-            )
+        temp_data.sort_values("Date", axis=0, ignore_index=True, inplace=True)
 
         # drop non functional column and all NaN columns
-        [temp_data.drop(i, axis=1, inplace=True, errors='ignore')
-         for i in ("Time", "RelTime", "Condition")]
+        [
+            temp_data.drop(i, axis=1, inplace=True, errors="ignore")
+            for i in ("Time", "RelTime", "Condition")
+        ]
         temp_data.dropna(axis=1, how="all", inplace=True)
 
         # replace value equal to 0 value with bfill, limit 1 consecutive
-        temp_data.replace(0, None, method='bfill', limit=1, inplace=True)
+        temp_data.replace(0, None, method="bfill", limit=1, inplace=True)
         # replace str value in object columns (mixed type) to float (or NaN)
         obj_col = temp_data.select_dtypes("object").columns.to_list()
         for col in obj_col:
-            temp_data[col] = temp_data[col].apply(
-                pd.to_numeric, errors='coerce'
-                ).astype(float)
+            temp_data[col] = temp_data[col].apply(pd.to_numeric, errors="coerce").astype(float)
 
         # interpolate columns NaN, max 3, with backward value
         temp_data.interpolate(axis=0, method="pad", limit=3, inplace=True)
@@ -1312,8 +1251,8 @@ class Model:
                 message="OBJECT COLUMNS: the following columns "
                 f"contain mixed value\n{', '.join(obj_col)}\n\n"
                 "NAN COLUMNS: the following columns"
-                f"contain multiple NAN value\n{', '.join(nan_col)}\n"
-                )
+                f"contain multiple NAN value\n{', '.join(nan_col)}\n",
+            )
 
     def module_check_jit(self, df: pd.DataFrame) -> tuple[list, list]:
         """Controlla se ci sono errori nei moduli\n
@@ -1323,9 +1262,7 @@ class Model:
             tuple[list, list]: moduli con errori, indici di errore di
             quei moduli"""
         matches = ["Iout_PM"]
-        modul_current = [
-            col for col in df.columns[2:] if any(x in col for x in matches)
-        ]
+        modul_current = [col for col in df.columns[2:] if any(x in col for x in matches)]
         iteration = df.shape[0]
         num_pompe = int(len(modul_current) / 3)
         error_col = {}
@@ -1344,9 +1281,7 @@ class Model:
                 error_col[mod2],
                 error_col[mod3],
             ) = fnb.module_check_index_jit(data1, data2, data3, iteration, n)
-        module_error = [
-            keys for keys in error_col.keys() if len(error_col[keys]) > 0
-        ]
+        module_error = [keys for keys in error_col.keys() if len(error_col[keys]) > 0]
         for mod in module_error:
             data = np.array(error_col[mod])
             error_col[mod] = fnb.correct_index_jit(data)
@@ -1387,18 +1322,16 @@ class Model:
         return cicli_rslt
 
     def __find_cycle(self, col: str, threshold: int):
-        spegnimenti, accensioni = fnb.speg_acc_index(
-                self.df[col].to_numpy(), threshold
-            )
-        result = self.__cicli_time_jit(
-                accensioni, spegnimenti, self.df.Date.to_numpy()
-            )
+        spegnimenti, accensioni = fnb.speg_acc_index(self.df[col].to_numpy(), threshold)
+        result = self.__cicli_time_jit(accensioni, spegnimenti, self.df.Date.to_numpy())
 
-        self.cycle_data[col] = {"threshold": threshold,
-                                "on_index": accensioni,
-                                "off_index": spegnimenti,
-                                "cycle": result[0],
-                                "time_on": result[1]}
+        self.cycle_data[col] = {
+            "threshold": threshold,
+            "on_index": accensioni,
+            "off_index": spegnimenti,
+            "cycle": result[0],
+            "time_on": result[1],
+        }
 
         return result
 
@@ -1424,9 +1357,7 @@ class Model:
         elif P_off[0] < P_on[0] and P_on[-1] > P_off[-1]:
             cicli = len(P_on) - 1
             for i in range(cicli):
-                time_on_cicli += fnb.delta_time(
-                    time[P_off[i + 1]], time[P_on[i]]
-                )
+                time_on_cicli += fnb.delta_time(time[P_off[i + 1]], time[P_on[i]])
             time_on = (
                 time_on_cicli
                 + fnb.delta_time(time[P_off[0]], time[0])
@@ -1437,9 +1368,7 @@ class Model:
         elif P_off[0] < P_on[0] and P_on[-1] < P_off[-1]:
             cicli = len(P_on)
             for i in range(cicli):
-                time_on_cicli += fnb.delta_time(
-                    time[P_off[i + 1]], time[P_on[i]]
-                )
+                time_on_cicli += fnb.delta_time(time[P_off[i + 1]], time[P_on[i]])
             time_on = time_on_cicli + fnb.delta_time(time[P_off[0]], time[0])
             cicli += 1
 
@@ -1478,9 +1407,7 @@ class Model:
             inplace=True,
         )
         self.df_lt.drop(
-            index=self.df_lt[
-                self.df_lt[column_name] < threshold
-            ].index,
+            index=self.df_lt[self.df_lt[column_name] < threshold].index,
             inplace=True,
         )
 
@@ -1526,7 +1453,8 @@ class Model:
         """Calculate rolling window data of column passed\n
         Args:
             column_name (str): column data name
-            revision (bool, optional): tell if its not raw file. Defaults to False.
+            revision (bool, optional): tell if its not raw file. Defaults to
+            False.
         """
         if revision:
             current_column = self.df_rev[column_name]
@@ -1544,8 +1472,13 @@ class Model:
         self.lifetest_analyzed["timeseries"][column_name] = y
 
     def create_export_file(
-        self, cicli_rslt: list[int], merge: bool = False, module: str = None,
-        smooth: bool = False, x_max: int = 150, n_bin: int = 150
+        self,
+        cicli_rslt: list[int],
+        merge: bool = False,
+        module: str = None,
+        smooth: bool = False,
+        x_max: int = 150,
+        n_bin: int = 150,
     ):
         """Crea file excel di report con le distribuzioni di temperatura\n
         Args:
@@ -1559,20 +1492,15 @@ class Model:
             n_bin (int, optional): Number of histogram bins. Defaults to 150.
         """
         try:
-            cicli_df = pd.DataFrame(
-                [cicli_rslt], columns=["Cicli", "Time_on(s)"]
+            cicli_df = pd.DataFrame([cicli_rslt], columns=["Cicli", "Time_on(s)"])
+            step = int(x_max / n_bin)
+            export_data = pd.DataFrame(
+                data=self.lifetest_analyzed["distr"], index=list(range(0, x_max, step))
             )
-            step = int(x_max/n_bin)
-            export_data = pd.DataFrame(data=self.lifetest_analyzed["distr"],
-                                       index=list(range(0, x_max, step))
-                                       )
-            export_nan = pd.DataFrame(data=self.lifetest_analyzed["NaN"],
-                                      index=["NotANumber"])
+            export_nan = pd.DataFrame(data=self.lifetest_analyzed["NaN"], index=["NotANumber"])
             export_distr = pd.concat([export_data, export_nan])
             if smooth:
-                export_timeseries = pd.DataFrame(
-                    data=self.lifetest_analyzed["timeseries"]
-                    )
+                export_timeseries = pd.DataFrame(data=self.lifetest_analyzed["timeseries"])
                 export_timeseries.insert(0, "Date", self.df_lt.Date)
 
             if merge is False:
@@ -1610,8 +1538,7 @@ class Model:
                     )
                 if smooth:
                     new_file = new_file.replace(".xlsx", ".parquet")
-                    export_timeseries.to_parquet(new_file,
-                                                 engine="fastparquet")
+                    export_timeseries.to_parquet(new_file, engine="fastparquet")
 
             # ----- MERGE ----- #
             elif merge is True:
@@ -1660,8 +1587,7 @@ class Model:
                             "Vin3_PM",
                             "Status_PM",
                         ]
-                        module_match = [f"{x}{int(module)}"
-                                        for x in module_matches]
+                        module_match = [f"{x}{int(module)}" for x in module_matches]
                         col_to_drop = [
                             col
                             for col in to_merge_f_xl.columns
@@ -1676,9 +1602,7 @@ class Model:
                     cicli_merge = to_merge_cicli.add(cicli_df, fill_value=0)
 
                     with pd.ExcelWriter(merged_filename) as writer:
-                        df_merge.to_excel(
-                            writer, sheet_name="Distribution", columns=columns
-                        )
+                        df_merge.to_excel(writer, sheet_name="Distribution", columns=columns)
                         cicli_merge.to_excel(writer, sheet_name="Cicli")
                 except Exception:
                     raise Warning("Nessun file xlsx unito")
@@ -1696,13 +1620,9 @@ class Model:
                                 for col in to_merge_f_xl.columns
                                 if any(x in col for x in module_match)
                             ]
-                            to_merge_timeseries.drop(
-                                col_to_drop, axis=1, inplace=True
-                            )
-                        delta_t = to_merge_timeseries.Date.values[
-                            -1
-                        ] + np.timedelta64(15, "s")
-                        export_timeseries.Date = export_timeseries.Date + delta_t
+                            to_merge_timeseries.drop(col_to_drop, axis=1, inplace=True)
+                        delta_t = to_merge_timeseries.Date.values[-1] + np.timedelta64(15, "s")
+                        export_timeseries.Date = export_timeseries.Date + delta_t  # noqa: E501
                         merge_timeseries = pd.concat(
                             [to_merge_timeseries, export_timeseries],
                             ignore_index=True,
@@ -1726,9 +1646,7 @@ class Model:
         time = {}
         iteration = data.shape[0] - 1
         for column in data.columns:
-            means[column], time[column] = fnb.ponderate_mean(
-                data[column].to_numpy(), iteration
-            )
+            means[column], time[column] = fnb.ponderate_mean(data[column].to_numpy(), iteration)
         data = [means, time]
         distr_mean = pd.DataFrame(data=data, index=["mean", "time"])
         return distr_mean
@@ -1743,19 +1661,13 @@ class Model:
 
         Returns:
             np.ndarray: smoothing data"""
-        y = savgol_filter(
-            y, 53, 3  # window size used for filtering
-        )  # order of fitted polynomial
+        y = savgol_filter(y, 53, 3)  # window size used for filtering  # order of fitted polynomial
         return y
 
-    def data_elaboration(
-        self, data: str, index: list[int] = None
-    ) -> None:
+    def data_elaboration(self, data: str, index: list[int] = None) -> None:
         """Elabora i dati\n
         Args:
             data (str): Nome della serie da elaborare
-            decim (int, optional): Numero dei primi elementi da non
-            considerare. Defaults to 0.
             index (list[int], optional): lista con indice di partenza e indice
             di fine per calcoli su zona specifica. Defaults to None.\n
         Returns:
@@ -1765,13 +1677,13 @@ class Model:
         # max = self.df[data].max()
         # min = self.df[data].min()
 
-        subdf = self.df.loc[:, self.df.columns != 'Date'].copy()
+        subdf = self.df.loc[:, self.df.columns != "Date"].copy()
         subdf.replace(0, np.NaN, inplace=True)
-        subdf.interpolate(axis=0, method='linear', limit=3, inplace=True)
+        subdf.interpolate(axis=0, method="linear", limit=3, inplace=True)
         if index is not None:
-            mean_p = subdf[data][index[0]: index[1]].mean()
-            max_p = subdf[data][index[0]: index[1]].max()
-            min_p = subdf[data][index[0]: index[1]].min()
+            mean_p = subdf[data][index[0] : index[1]].mean()
+            max_p = subdf[data][index[0] : index[1]].max()
+            min_p = subdf[data][index[0] : index[1]].min()
         else:
             mean_p = np.nan
             max_p = np.nan
@@ -1813,9 +1725,7 @@ class Ctrl_Thermal:
         self.update_th_fig(False, columns=[col_slc1, col_slc2])
 
         # other options
-        frame.ax1.xaxis.set_major_locator(
-            mdates.AutoDateLocator(maxticks=11, minticks=4)
-        )
+        frame.ax1.xaxis.set_major_locator(mdates.AutoDateLocator(maxticks=11, minticks=4))
         frame.ax1.xaxis.set_major_formatter(mdates.DateFormatter("%H:%M:%S"))
         plt.margins(0.01, 0.01)
         plt.rcParams["axes.autolimit_mode"] = "round_numbers"
@@ -1864,17 +1774,9 @@ class Ctrl_Thermal:
         elif smooth is True:
             y = self.model.smoothing(self.model.df[data])
         if yaxes == 1:
-            frame.line.append(
-                frame.ax1.plot(
-                    x, y, linewidth=1, label=data, color=next(color_c)
-                )[0]
-            )
+            frame.line.append(frame.ax1.plot(x, y, linewidth=1, label=data, color=next(color_c))[0])
         elif yaxes == 2:
-            frame.line.append(
-                frame.ax2.plot(
-                    x, y, linewidth=1, label=data, color=next(color_c)
-                )[0]
-            )
+            frame.line.append(frame.ax2.plot(x, y, linewidth=1, label=data, color=next(color_c))[0])
 
     def analysis_th(self):
         """Handle all thermal analysis process"""
@@ -1900,12 +1802,10 @@ class Ctrl_Thermal:
         data = [["%.4f" % elem for elem in val] for val in result.values()]
         row_index = [key for key in result.keys()]
         data_p = [
-            ["%.4f" % elem for elem in val]
-            for key, val in result.items()
-            if key in col_selected
+            ["%.4f" % elem for elem in val] for key, val in result.items() if key in col_selected
         ]
         row_index_p = [key for key in result.keys() if key in col_selected]
-        
+
         self.view.index_lbl.configure(text=f"Samples: {index[1]-index[0]}")
         self.view.debug_res.total_columns(number=len(row_index_p))
         self.view.debug_res.headers(newheaders=row_index_p)
@@ -1916,7 +1816,7 @@ class Ctrl_Thermal:
             redraw=True,
             verify=False,
             reset_highlights=False,
-            )
+        )
 
         # self.view.detail_res.total_rows(number=len(row_index_p))
         # self.view.detail_res.headers(newheaders=row_index_p)
@@ -1928,7 +1828,7 @@ class Ctrl_Thermal:
             redraw=True,
             verify=False,
             reset_highlights=False,
-            )
+        )
         self.view.detail_res.row_index(
             newindex=row_index_p,
             index=None,
@@ -1946,7 +1846,7 @@ class Ctrl_Thermal:
             redraw=True,
             verify=False,
             reset_highlights=False,
-            )
+        )
         self.view.all_res.row_index(
             newindex=row_index,
             index=None,
@@ -1966,8 +1866,7 @@ class Ctrl_Thermal:
         for ax in frame.fig.axes:
             _, label = ax.get_legend_handles_labels()
             if bool(frame.line_mean):
-                [ax.lines.remove(line) for _, line in frame.line_mean.items()
-                 if line in ax.lines]
+                [ax.lines.remove(line) for _, line in frame.line_mean.items() if line in ax.lines]
 
         # ----- plot elaborate data -----
         color_c = iter(plt.cm.rainbow(np.linspace(0, 1, len(col_selected))))
@@ -2014,47 +1913,39 @@ class Ctrl_Thermal:
         """
         if merge:
             filename = filedialog.askopenfilename(
-                title='Select a cumulation file to merge',
+                title="Select a cumulation file to merge",
                 defaultextension="*.xlsx",
-                filetypes=[("Tutti i File Excel", "*.xl*"),
-                           ("Tutti i file", "*.*")]
-                )
+                filetypes=[("Tutti i File Excel", "*.xl*"), ("Tutti i file", "*.*")],
+            )
         else:
             filename = filedialog.asksaveasfilename(
-                initialfile='output.xlsx',
-                defaultextension='.xlsx',
-                filetypes=[('Tutti i file', '*.*'),
-                           ('Cartella excel (.xlsx)', '*.xlsx')]
-                )
+                initialfile="output.xlsx",
+                defaultextension=".xlsx",
+                filetypes=[("Tutti i file", "*.*"), ("Cartella excel (.xlsx)", "*.xlsx")],
+            )
 
         if filename:
             sub_data, data_mean, data_ptp = self.__exp_data()
 
             if merge:
                 sheet = 0
-                to_merge_data = pd.read_excel(io=filename,
-                                              sheet_name=sheet,
-                                              index_col=0)
-                to_merge_mean = pd.read_excel(io=filename,
-                                              sheet_name=sheet+1,
-                                              index_col=0)
-                to_merge_ptp = pd.read_excel(io=filename,
-                                             sheet_name=sheet+2,
-                                             index_col=0)
+                to_merge_data = pd.read_excel(io=filename, sheet_name=sheet, index_col=0)
+                to_merge_mean = pd.read_excel(io=filename, sheet_name=sheet + 1, index_col=0)
+                to_merge_ptp = pd.read_excel(io=filename, sheet_name=sheet + 2, index_col=0)
                 data_merge = pd.concat([to_merge_data, sub_data])
                 mean_merge = pd.concat([to_merge_mean, data_mean])
                 ptp_merge = pd.concat([to_merge_ptp, data_ptp])
 
-                with pd.ExcelWriter(filename, engine='openpyxl') as writer:
-                    data_merge.to_excel(writer, sheet_name='Data')
-                    mean_merge.to_excel(writer, sheet_name='Mean')
-                    ptp_merge.to_excel(writer, sheet_name='PtP')
+                with pd.ExcelWriter(filename, engine="openpyxl") as writer:
+                    data_merge.to_excel(writer, sheet_name="Data")
+                    mean_merge.to_excel(writer, sheet_name="Mean")
+                    ptp_merge.to_excel(writer, sheet_name="PtP")
 
             else:
-                with pd.ExcelWriter(filename, engine='openpyxl') as writer:
-                    sub_data.to_excel(writer, sheet_name='Data')
-                    data_mean.to_excel(writer, sheet_name='Mean')
-                    data_ptp.to_excel(writer, sheet_name='PtP')
+                with pd.ExcelWriter(filename, engine="openpyxl") as writer:
+                    sub_data.to_excel(writer, sheet_name="Data")
+                    data_mean.to_excel(writer, sheet_name="Mean")
+                    data_ptp.to_excel(writer, sheet_name="PtP")
 
         self.statusbar.update_status(True, "Export complete")
 
@@ -2062,7 +1953,7 @@ class Ctrl_Thermal:
         """Return the correct data to export\n"""
         index = self.view.th_plot_frm.x_index
         try:
-            sub_data = self.model.df[index[0]:index[1]].copy()
+            sub_data = self.model.df[index[0] : index[1]].copy()
         except Exception:
             sub_data = self.model.df.copy()
         finally:
@@ -2097,6 +1988,78 @@ class Ctrl_Thermal:
                 frame.ax1.axvline(x=value, color="black", linestyle="--")
         frame.canvas.draw_idle()
 
+    def create_preset(self, thermal:bool):
+        if self.view.frm_option.values:
+            self.select_preset(thermal, save=True)
+
+    def select_preset(self, thermal:bool=True, save:bool=False):
+        mode = "thermal" if thermal else "lifetest"
+
+        with open(f"{APP_PATH}\\preset.yaml", "r") as f:
+            preset = yaml.safe_load(f)
+            th_preset = preset[mode]
+        root = ttk.Toplevel()
+        listb = tk.Listbox(
+            root, selectmode=tk.SINGLE, height=len(th_preset), width=20
+        )  # create Listbox
+        for x in th_preset:
+            listb.insert(tk.END, x)
+        listb.pack(padx=2, pady=2)  # put listbox on window
+        if save:  # save new
+            root.title=f"Save your actual selection as {mode.capitalize()} Preset"
+            ttk.Label(root, text="or insert new one").pack(pady=5)
+            ent = PlaceholderEntry(root, placeholder="New Set Name", width=20)
+            ent.bind("<Key>",
+                     lambda *_: listb.selection_clear(0, tk.END) if ent.get()!=ent._ph else None,
+                     add="+")
+            ent.pack()
+            btn = tk.Button(
+                root, text="SAVE",
+                command=lambda wd=root, lb=listb, ent=ent, mode=mode:
+                    self.__save_preset(wd, lb, ent, mode)
+                    )
+            btn.pack(padx=2, pady=2)
+        else:  # select
+            root.title=f"Select your {mode.capitalize()} Preset"
+            btn = tk.Button(
+                root, text="SET", command=lambda wd=root, lb=listb: self.__select_th_preset(wd, lb)
+            )
+            btn.pack()
+
+    def __select_th_preset(self, wd: ttk.Toplevel, lb: tk.Listbox):
+        idx = lb.curselection()
+        sel_preset = lb.get(idx)
+        with open(f"{APP_PATH}\\preset.yaml", "r") as f:
+            preset = yaml.safe_load(f)
+            th_preset = preset["thermal"][sel_preset]
+        def_col = [
+            i.strip().replace(" ", "_").replace("(", "").replace(")", "").replace(",", "")
+            for i in th_preset
+        ]
+        available = self.view.frm_option.values
+        self.view.frm_option.clear_list()
+        self.view.frm_option.insert(available=available, selected=def_col)
+        wd.destroy()
+
+    def __save_preset(self, wd:ttk.Toplevel, lb:tk.Listbox, ent:ttk.Entry, mode:str):
+        if lb.curselection() != ():
+            idx = lb.curselection()
+            new_name = lb.get(idx)
+        else:
+            new_name = ent.get()
+        new_preset = self.view.frm_option.get()
+
+        with open(f"{APP_PATH}\\preset.yaml", "r") as f:
+            preset = yaml.safe_load(f)
+        actual_presets = preset[mode]
+        actual_presets[new_name] = new_preset
+        preset[mode] = actual_presets
+        with open(f"{APP_PATH}\\preset.yaml", "w") as f:
+            yaml.safe_dump(preset, f)
+
+        wd.destroy()
+
+
 
 class Ctrl_LifeTest:  # TODO compare
     model: Model
@@ -2124,8 +2087,7 @@ class Ctrl_LifeTest:  # TODO compare
                 else:
                     raise TypeError("Inserire valori numerici")
 
-            cicli_opt = {col: soglia
-                         for col, soglia in zip(cln_slct, cln_soglia)}
+            cicli_opt = {col: soglia for col, soglia in zip(cln_slct, cln_soglia)}
 
             cicli_rslt = self.model.find_cycle(cicli_opt)
             # {col: {"soglia": soglia}
@@ -2153,9 +2115,7 @@ class Ctrl_LifeTest:  # TODO compare
             self.view.analysis_btn["state"] = "normal"
             self.view.lifetest.tab(1, state="normal")
             self.view.lifetest.tab(2, state="normal")
-            self.statusbar.update_status(
-                True, "Calcoli Cicli di Lavoro completato"
-            )
+            self.statusbar.update_status(True, "Calcoli Cicli di Lavoro completato")
 
         except BufferError as warning:
             self.view.show_warning(warning)
@@ -2224,9 +2184,7 @@ class Ctrl_LifeTest:  # TODO compare
             x_max = distr_tab.x_max.get()
             x_min = distr_tab.x_min.get()
             n_bin = distr_tab.bins.get()
-            y = self.model.data_distribution(
-                column_slct, x_min=x_min, x_max=x_max, n_bins=n_bin
-            )
+            y = self.model.data_distribution(column_slct, x_min=x_min, x_max=x_max, n_bins=n_bin)
             x = np.array(range(len(y)))
             width = (int(x_max) - int(x_min)) / int(n_bin)
             x = x * (width) + x_min
@@ -2236,9 +2194,7 @@ class Ctrl_LifeTest:  # TODO compare
 
         distr_tab.fig.delaxes(distr_tab.ax)
         distr_tab.ax = distr_tab.fig.add_subplot(111)
-        distr_tab.fig.subplots_adjust(
-            left=0.125, bottom=0.1, top=0.95, right=0.95
-            )
+        distr_tab.fig.subplots_adjust(left=0.125, bottom=0.1, top=0.95, right=0.95)
         # if big_fig:
         #     y = self.model.data_distr[column_slct][:-2]
         #     frame.fig.subplots_adjust(bottom=0.14, top=0.95, right=0.95)
@@ -2247,9 +2203,7 @@ class Ctrl_LifeTest:  # TODO compare
         y = self.model.lifetest_analyzed["distr"][column_slct]
         mean = self.model.df_lt[column_slct].mean()
 
-        distr_tab.ax.axvline(
-            mean, color="green", linewidth=1, label=f"media:{mean:.4f}"
-        )
+        distr_tab.ax.axvline(mean, color="green", linewidth=1, label=f"media:{mean:.4f}")
         distr_tab.ax.bar(
             x,
             y,
@@ -2290,17 +2244,14 @@ class Ctrl_LifeTest:  # TODO compare
 
         timeseries_tab.fig.delaxes(timeseries_tab.ax)
         timeseries_tab.ax = timeseries_tab.fig.add_subplot(111)
-        timeseries_tab.fig.subplots_adjust(
-            left=0.125, bottom=0.1, top=0.95, right=0.95
-            )
+        timeseries_tab.fig.subplots_adjust(left=0.125, bottom=0.1, top=0.95, right=0.95)
         timeseries_tab.xlim_max = x.iloc[-1]
         timeseries_tab.xlim_min = x.iloc[0]
-        timeseries_tab.ax.plot(x[0:length], y,
-                               linewidth=0.7, label=column_slct)
+        timeseries_tab.ax.plot(x[0:length], y, linewidth=0.7, label=column_slct)
         if timeseries_tab.smoothing.get():
-            timeseries_tab.ax.plot(x[0:length], y_smooth,
-                                   linewidth=0.6, color="r",
-                                   label=f"{column_slct}_smooth")
+            timeseries_tab.ax.plot(
+                x[0:length], y_smooth, linewidth=0.6, color="r", label=f"{column_slct}_smooth"
+            )
         timeseries_tab.ax.set_ylabel("Temp")
         timeseries_tab.ax.set_title(column_slct)
         timeseries_tab.ax.grid()
@@ -2361,9 +2312,7 @@ class Ctrl_LifeTest:  # TODO compare
         # soglia cicli
         soglia_cicli = self.view.option_wd.soglia_text.get()
         if soglia_cicli == "":
-            raise Exception(
-                "Inserire nome di una colonna e un valore di soglia"
-            )
+            raise Exception("Inserire nome di una colonna e un valore di soglia")
         elif soglia_cicli.isnumeric() is False:
             raise TypeError("Inserire un valore numerico")
         elif soglia_cicli.isnumeric() is True:
@@ -2372,19 +2321,15 @@ class Ctrl_LifeTest:  # TODO compare
         # width bin
         bar_width = self.view.option_wd.width_.get()
         if bar_width == "":
-            raise Exception(
-                "Inserire un valore di 'bar width'"
-            )
+            raise Exception("Inserire un valore di 'bar width'")
         bar_width = int(bar_width)
 
         # range histogram
         x_max = self.view.option_wd.range.get()
         if x_max == "":
-            raise Exception(
-                "Inserire un valore di range"
-            )
-        n_bin = round(x_max/bar_width)
-        x_max = bar_width*n_bin
+            raise Exception("Inserire un valore di range")
+        n_bin = round(x_max / bar_width)
+        x_max = bar_width * n_bin
 
         return col_cicli, soglia_cicli, x_max, n_bin
 
@@ -2392,13 +2337,9 @@ class Ctrl_LifeTest:  # TODO compare
         """Comanda il processo di creazione del file di report"""
         try:
             col_cicli, soglia_cicli, x_max, n_bin = self.export_all_option_control()  # noqa: E501
-            self.statusbar.update_status(
-                True, "Calcoli per export in corso..."
-            )
+            self.statusbar.update_status(True, "Calcoli per export in corso...")
             self.view.parent.update()
-            self.model.lifetest_analyzed = {"distr": {},
-                                            "NaN": {},
-                                            "timeseries": {}}
+            self.model.lifetest_analyzed = {"distr": {}, "NaN": {}, "timeseries": {}}
             cicli_rslt = self.model.find_cycle((col_cicli, soglia_cicli))
             cicli_rslt[col_cicli][1] = cicli_rslt[col_cicli][1].total_seconds()
 
@@ -2423,11 +2364,9 @@ class Ctrl_LifeTest:  # TODO compare
             for column in distr_col:
                 if any(x in column for x in module_matches):
                     mod = column[-3:]
-                    self.model.data_distribution(column, f"Iout_{mod}",
-                                                 x_max=x_max, n_bins=n_bin)
+                    self.model.data_distribution(column, f"Iout_{mod}", x_max=x_max, n_bins=n_bin)
                 else:
-                    self.model.data_distribution(column,
-                                                 x_max=x_max, n_bins=n_bin)
+                    self.model.data_distribution(column, x_max=x_max, n_bins=n_bin)
                 if all_:
                     self.model.data_smoothing(column)
 
@@ -2437,16 +2376,14 @@ class Ctrl_LifeTest:  # TODO compare
                 module=self.view.option_wd.module.get(),
                 smooth=all_,
                 x_max=x_max,
-                n_bin=n_bin
+                n_bin=n_bin,
             )
             self.statusbar.update_status(True, "File esportato correttamente")
 
         except Warning as warning:
             self.view.show_warning(warning)
             self.view.option_wd.focus_set()
-            self.statusbar.update_status(
-                True, "File esportato correttamente - WARNING"
-            )
+            self.statusbar.update_status(True, "File esportato correttamente - WARNING")
         except TypeError as error:
             self.view.show_error(error)
             self.view.option_wd.focus_set()
@@ -2467,6 +2404,7 @@ class Controller(Ctrl_Thermal, Ctrl_LifeTest):
     esegue logica, si relaziona col model,
     passa i risultati al View
     """
+
     def __init__(self, model: Model, view: View, statusbar: Statusbar):
         self.model = model
         self.view = view
@@ -2497,12 +2435,10 @@ class Controller(Ctrl_Thermal, Ctrl_LifeTest):
                 with open(f"{APP_PATH}\\preset.yaml", "r") as f:
                     preset = yaml.safe_load(f)
                 def_col = preset["thermal"]["DEFAULT"]
-                def_col = [i.strip()
-                           .replace(" ", "_")
-                           .replace("(", "")
-                           .replace(")", "")
-                           .replace(",", "")
-                           for i in def_col]
+                def_col = [
+                    i.strip().replace(" ", "_").replace("(", "").replace(")", "").replace(",", "")
+                    for i in def_col
+                ]
 
                 # ----- RESET LIFETEST ----- #
                 self.__clear_view_lt()
@@ -2513,25 +2449,18 @@ class Controller(Ctrl_Thermal, Ctrl_LifeTest):
                 self.view.frm_option.insert(available=columns, selected=def_col)
                 self.view.debug_res.total_columns(number=len(columns))
                 self.view.debug_res.headers(newheaders=columns)
-                self.view.debug_res.refresh(redraw_header=True,
-                                         redraw_row_index=True)
+                self.view.debug_res.refresh(redraw_header=True, redraw_row_index=True)
 
                 # ----- RESET MODEL ----- #
                 self.model.df_rev = None
                 self.model.df_lt = None
                 self.model.cycle_data: dict = {}
-                self.model.lifetest_analyzed: dict = {"distr": {},
-                                                      "NaN": {},
-                                                      "timeseries": {}}
+                self.model.lifetest_analyzed: dict = {"distr": {}, "NaN": {}, "timeseries": {}}
 
                 self.model.span_data = {}
 
-                self.view.parent.title(
-                    f"DataAnalysis - {path.basename(file)}"
-                )
-                self.statusbar.update_status(
-                    True, "File importato correttamente"
-                )
+                self.view.parent.title(f"DataAnalysis - {path.basename(file)}")
+                self.statusbar.update_status(True, "File importato correttamente")
 
         except ValueError as error:
             self.view.show_error(error)
@@ -2575,16 +2504,12 @@ class Controller(Ctrl_Thermal, Ctrl_LifeTest):
 
     def module_check(self):
         """Check during import if some module has error"""
-        module_broke, index_broke = self.model.module_check_jit(
-            self.model.df
-        )
+        module_broke, index_broke = self.model.module_check_jit(self.model.df)
         if len(module_broke) > 0:
             box_title = "POSSIBILI MODULI CON ERRORI!!!\n\n"
             box_message = ""
             for i in range(len(module_broke)):
-                box_message += (
-                    f"{module_broke[i]}: controllare indici {index_broke[i]}\n"
-                )
+                box_message += f"{module_broke[i]}: controllare indici {index_broke[i]}\n"
             message = box_title + box_message
             self.view.show_warning(message)
 
@@ -2599,6 +2524,7 @@ def on_closing() -> Messagebox:
 if __name__ == "__main__":
     # add new themes if not present
     from utils import import_user_themes
+
     import_user_themes()
     # launch application
     master = DataAnalysis()

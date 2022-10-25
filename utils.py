@@ -204,12 +204,29 @@ class Menubar:
         # other_dropdown.add_cascade(label="Thermal - Edit", menu=edit_dropdown)
         # option dropdown
         option_dropdown = ttk.Menu(menubar, font=fontMenu, tearoff=0)
+        preset_dropdown = ttk.Menu(option_dropdown, font=fontMenu, tearoff=0)
+        preset_dropdown.add_command(
+            label="Select Thermal Preset",
+            command=self.select_th_preset,
+            accelerator="Ctrl+Alt+N",
+            )
+        preset_dropdown.add_command(
+            label="Create Thermal Preset",
+            command=lambda: self.create_preset(thermal=True),
+            accelerator="Ctrl+Alt+N",
+            )
+        preset_dropdown.add_command(
+            label="Create Lifetest Preset",
+            command=self.create_preset,
+            accelerator="Ctrl+Alt+N",
+            )
         theme_dropdown = ttk.Menu(option_dropdown, font=fontMenu, tearoff=0)
         self.theme = tk.IntVar(value=0)
         theme_dropdown.add_radiobutton(label='light', var=self.theme,
                                        value=0, command=self.change_theme)
         theme_dropdown.add_radiobutton(label='dark', var=self.theme,
                                        value=1, command=self.change_theme)
+        option_dropdown.add_cascade(label="Preset", menu=preset_dropdown)
         option_dropdown.add_cascade(label="Theme", menu=theme_dropdown)
         # menubar
         menubar.add_cascade(label="File", menu=file_dropdown)
@@ -295,6 +312,14 @@ class Menubar:
             self.parent._style_mod()
         else:
             self.parent.style.theme_use("abbtheme")
+
+    def select_th_preset(self):
+        if self.controller:
+            self.controller.select_preset()
+
+    def create_preset(self, thermal:bool = False):
+        if self.controller:
+            self.controller.create_preset(thermal)
 
 
 # ----- View Class ---- #
@@ -537,7 +562,7 @@ class Checklist(ttk.Frame):
                   ).grid(row=1, column=0, sticky="ew", pady=2, padx=2)
         self.available_items = tk.StringVar()
         self._listbox = ScrolledListbox(self,
-                                        selectmode=tk.MULTIPLE,
+                                        selectmode=tk.EXTENDED,
                                         listvariable=self.available_items,
                                         )
         self._listbox.grid(row=2, column=0, sticky="nsew")
@@ -558,7 +583,7 @@ class Checklist(ttk.Frame):
         self._slct_lstbx = ScrolledListbox(self,
                                            listvariable=self.selected,
                                            exportselection=False,
-                                           selectmode=tk.MULTIPLE
+                                           selectmode=tk.EXTENDED
                                            )
         self._slct_lstbx.hide_selection = []
         self._slct_lstbx.grid(row=2, column=1, padx=25, sticky="nsew")
@@ -604,7 +629,8 @@ class Checklist(ttk.Frame):
         sel_items = []
         for i in event.widget.curselection():
             sel_items.append(event.widget.get(i))
-        self.all_btn.config(text="Remove All")
+        if sel_items != []:
+            self.all_btn.config(text="Remove All")
         items = [x for x in self.values if x in sel_items + self._slct_lstbx.hide_selection]
         self.selected.set(items)
 
@@ -933,14 +959,14 @@ class CollapsingFrame(ttk.Frame):
 class PlaceholderEntry(ttk.Entry):
     @property
     def input(self):
-        return self.get() if self.get() not in [self.__ph, ''] else None
+        return self.get() if self.get() not in [self._ph, ''] else None
 
     @input.setter
     def input(self, value):
         self.delete(0, 'end')
         self.insert(0, value)
-        # self.configure(fg=self.ghost if value == self.__ph else self.normal)
-        self.configure(style=self.ghost if value == self.__ph else self.normal)
+        # self.configure(fg=self.ghost if value == self._ph else self.normal)
+        self.configure(style=self.ghost if value == self._ph else self.normal)
 
     @property
     def isempty(self) -> bool:
@@ -948,7 +974,7 @@ class PlaceholderEntry(ttk.Entry):
 
     @property
     def isholder(self) -> bool:
-        return self.get() == self.__ph
+        return self.get() == self._ph
 
     def __init__(self, master: tk.Misc, placeholder: str, **kwargs):
         ttk.Entry.__init__(self, master, **kwargs)
@@ -957,7 +983,7 @@ class PlaceholderEntry(ttk.Entry):
         master.style.configure('PlaceHolder.TEntry', foreground='#BBBBBB')
         self.ghost  = "PlaceHolder.TEntry"
 
-        self.__ph = placeholder
+        self._ph = placeholder
         self.input = placeholder
 
         vcmd = self.register(self.validate)
@@ -970,7 +996,7 @@ class PlaceholderEntry(ttk.Entry):
     #rewire .insert() to be a proxy of .input
     def validate(self, action_text, orig_text, action):
         if action == '1':
-            if orig_text == self.__ph:
+            if orig_text == self._ph:
                 self.input = action_text
 
         return True
@@ -983,13 +1009,13 @@ class PlaceholderEntry(ttk.Entry):
     #adds placeholder if necessary
     def focusout(self, event=None):
         if self.isempty:
-            self.input = self.__ph
+            self.input = self._ph
 
     #juggles the placeholder while you type
     def check(self, event):
         if event.keysym == 'BackSpace':
             if self.input and len(self.input) == 1:
-                self.input = self.__ph
+                self.input = self._ph
                 self.icursor(0)
                 return 'break'
         elif self.isholder:
